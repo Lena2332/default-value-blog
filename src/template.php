@@ -2,20 +2,13 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" href="/css/style.css">
     <title>{DV.Campus} PHP Framework</title>
     <style>
-header,
+        header,
         main,
         footer {
-    border: 1px dashed black;
-        }
-
-        .news-list {
-    display: flex;
-}
-
-        .news-list .news {
-    max-width: 30%;
+           border: 1px dashed black;
         }
     </style>
 </head>
@@ -25,11 +18,13 @@ header,
             <img src="/img/logo.jpg" alt="{DV.Campus} Logo" width="200"/>
         </a>
         <nav>
-            <?php foreach (getRubricList() as $rubric): ?>
-                <li>
-                    <a href="/<?= $rubric['url'] ?>"><?= $rubric['name'] ?></a>
-                </li>
-            <?php endforeach; ?>
+            <ul>
+                <?php foreach (getRubricList() as $rubric): ?>
+                    <li>
+                        <a href="/<?= $rubric['url'] ?>"><?= $rubric['name'] ?></a>
+                    </li>
+                <?php endforeach; ?>
+            </ul>
         </nav>
     </header>
 

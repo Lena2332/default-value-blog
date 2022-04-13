@@ -7,8 +7,8 @@
                 <a href="/<?= $post['url'] ?>" title="<?= $post['name'] ?>">
                     <img src="/img/<?= $post['img'] ?>" alt="<?= $post['name'] ?>" width="200"/>
                 </a>
-                <a href="/<?= $post['url'] ?>" title="<?= $post['name'] ?>"><?= $post['name'] ?></a>
-                <span><?= $post['public_date'] ?></span>
+                <a href="/<?= $post['url'] ?>" title="<?= $post['name'] ?>" class="title"><?= $post['name'] ?></a>
+                <span>created: <?= $post['public_date'] ?></span>
                 <button type="button"><a href="/<?= $post['url'] ?>">Read now</a></button>
             </div>
             <?php endforeach; ?>

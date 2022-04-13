@@ -12,19 +12,19 @@ function getRubricList(): array
             'posts'     => [1,3,7]
         ],
         2 => [
-            'rubric_id' => 1,
+            'rubric_id' => 2,
             'name'      => 'Економіка',
             'url'       => 'economic',
             'posts'     => [2,5,8]
         ],
         3 => [
-            'rubric_id' => 1,
+            'rubric_id' => 2,
             'name'      => 'Культура',
             'url'       => 'culture',
             'posts'     => [4,6,9]
         ],
         4 => [
-            'rubric_id' => 1,
+            'rubric_id' => 4,
             'name'      => 'Інтерв\'ю',
             'url'       => 'interview',
             'posts'     => [10,11]
