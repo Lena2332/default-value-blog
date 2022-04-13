@@ -138,5 +138,77 @@ function getPostList(): array
     ];
 }
 
+function getRubricPosts(int $rubricId): array
+{
+    $rubrics = getRubricList();
+
+    if (!isset($rubrics[$rubricId])) {
+        throw new InvalidArgumentException("Rubric with ID $rubricId does not exist");
+    }
+
+    $rubricPosts = [];
+    $posts = getPostList();
+
+    foreach($rubrics[$rubricId]['posts'] as $postId){
+        if (!isset($posts[$postId])) {
+            throw new InvalidArgumentException("Post with ID $postId from rubric $rubricId does not exist");
+        }
+
+        $rubricPosts[] = $posts[$postId];
+    }
+
+    return $rubricPosts;
+}
+
+function getRubricByUrl(string $rubricUrl): ?array
+{
+    $rubrics = getRubricList();
+
+    $data = array_filter($rubrics,
+        function($rubric) use ($rubricUrl){
+           return $rubric['url'] === $rubricUrl;
+        }
+    );
+
+    return $data;
+}
+
+function getPostByUrl(string $postUrl): ?array
+{
+    $posts = getPostList();
+
+    $data = array_filter($posts,
+        function($post) use ($postUrl){
+            return $post['url'] === $postUrl;
+        }
+    );
+
+    return $data;
+
+}
+
+function getLatestNews(int $quantity = 5, int $pastDays = 2): ?array
+{
+   $posts = getPostList();
+
+   //get unix time to past days
+   $diffDayTime = time() - $pastDays * 86400;
+
+   $data = array_filter($posts,
+       function($post) use($diffDayTime){
+           $postTime = strtotime($post['public_date']);
+           return $postTime >= $diffDayTime;
+       }
+   );
+
+   usort($data, function ($item1, $item2) {
+       return strtotime($item2['public_date']) <=> strtotime($item1['public_date']);
+   });
+
+   //take only needed quantity of posts
+   $data = array_slice($data, 0, $quantity);
+
+   return $data;
+}
 
 
