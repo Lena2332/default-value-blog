@@ -165,7 +165,7 @@ function getRubricByUrl(string $rubricUrl): ?array
     $rubrics = getRubricList();
 
     $data = array_filter($rubrics,
-        function($rubric) use ($rubricUrl){
+        function ($rubric) use ($rubricUrl) {
            return $rubric['url'] === $rubricUrl;
         }
     );
@@ -178,7 +178,7 @@ function getPostByUrl(string $postUrl): ?array
     $posts = getPostList();
 
     $data = array_filter($posts,
-        function($post) use ($postUrl){
+        function ($post) use ($postUrl) {
             return $post['url'] === $postUrl;
         }
     );
@@ -195,7 +195,7 @@ function getLatestNews(int $quantity = 5, int $pastDays = 2): ?array
    $diffDayTime = time() - $pastDays * 86400;
 
    $data = array_filter($posts,
-       function($post) use($diffDayTime){
+       function ($post) use ($diffDayTime) {
            $postTime = strtotime($post['public_date']);
            return $postTime >= $diffDayTime;
        }
