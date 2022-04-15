@@ -140,6 +140,36 @@ class Repository
     }
 
     /**
+     * @param int $quantity
+     * @param int $pastDays
+     * @return Entity[]|null
+     */
+    public function getLatestPosts($quantity, $pastDays): ?array
+    {
+        $posts = $this->getPostList();
+
+        //get unix time to past days
+        $diffDayTime = time() - $pastDays * 86400;
+
+        $data = array_filter($posts,
+            function ($post) use ($diffDayTime) {
+                $postTime = strtotime($post->getPublicDate());
+                return $postTime >= $diffDayTime;
+            }
+        );
+
+        usort($data, function ($item1, $item2) {
+            return strtotime($item2->getPublicDate()) <=> strtotime($item1->getPublicDate());
+        });
+
+        //take only needed quantity of posts
+        $data = array_slice($data, 0, $quantity);
+
+        return $data;
+    }
+
+
+    /**
      * @return Entity
      * @throws \DI\DependencyException
      * @throws \DI\NotFoundException

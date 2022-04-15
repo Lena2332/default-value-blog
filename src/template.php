@@ -13,7 +13,7 @@
         <a href="/" title="{DV.Campus} PHP Framework">
             <img src="/img/logo.jpg" alt="{DV.Campus} Logo" width="200"/>
         </a>
-
+        <?= $this->render(\OKBlog\Blog\Block\RubricListBlock::class) ?>
     </header>
 
     <?= $this->render($this->getContent(), $this->getContentBlockTemplate()) ?>
