@@ -6,11 +6,11 @@ namespace OKBlog\Blog\Controller;
 
 class Post implements \OKBlog\Framework\Http\ControllerInterface
 {
-    private $request;
+    private \OKBlog\Framework\Http\Request $request;
 
     public function __construct(
         \OKBlog\Framework\Http\Request $request
-    ){
+    ) {
          $this->request = $request;
     }
 

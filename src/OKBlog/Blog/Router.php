@@ -13,7 +13,7 @@ class Router implements \OKBlog\Framework\Http\RouterInterface
 
     public function __construct(
         \OKBlog\Framework\Http\Request $request
-    ){
+    ) {
         $this->request = $request;
     }
 
@@ -24,12 +24,12 @@ class Router implements \OKBlog\Framework\Http\RouterInterface
     {
         require_once '../src/data.php';
 
-        if($data = getRubricByUrl($requestUrl)){
+        if ($data = getRubricByUrl($requestUrl)) {
             $this->request->setParameter('rubric', $data);
             return Rubric::class;
         }
 
-        if($data = getPostByUrl($requestUrl)){
+        if ($data = getPostByUrl($requestUrl)) {
             $this->request->setParameter('post', $data);
             return Post::class;
         }

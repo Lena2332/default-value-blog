@@ -10,7 +10,7 @@ class Rubric implements \OKBlog\Framework\Http\ControllerInterface
 
     public function __construct(
         \OKBlog\Framework\Http\Request $request
-    ){
+    ) {
         $this->request = $request;
     }
 
