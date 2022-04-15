@@ -7,11 +7,17 @@ namespace OKBlog\Blog\Model\Post;
 class Entity
 {
     private int $postId;
+
     private string $url;
+
     private string $name;
+
     private string $img;
+
     private string $introText;
+
     private string $text;
+
     private string $publicDate;
 
     /**

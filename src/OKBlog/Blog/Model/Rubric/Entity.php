@@ -7,8 +7,11 @@ namespace OKBlog\Blog\Model\Rubric;
 class Entity
 {
     private int $rubricId;
+
     private string $url;
+
     private string $name;
+
     private array $posts;
 
     /**
