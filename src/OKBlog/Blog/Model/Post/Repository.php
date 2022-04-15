@@ -16,6 +16,9 @@ class Repository
         $this->factory = $factory;
     }
 
+    /**
+     * @return Entity[]
+     */
     public function getPostList(): array
     {
         return [
