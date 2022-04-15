@@ -1,16 +1,12 @@
+<?php
+require_once '../src/data.php';
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="/css/style.css">
     <title>{DV.Campus} PHP Framework</title>
-    <style>
-        header,
-        main,
-        footer {
-           border: 1px dashed black;
-        }
-    </style>
 </head>
 <body>
     <header>
