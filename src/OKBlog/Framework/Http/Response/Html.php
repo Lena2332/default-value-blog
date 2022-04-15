@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace OKBlog\Blog\Framework\Http\Response;
+namespace OKBlog\Framework\Http\Response;
 
 class Html extends Raw
 {

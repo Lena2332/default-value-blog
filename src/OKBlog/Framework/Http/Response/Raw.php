@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace OKBlog\Blog\Framework\Http\Response;
+namespace OKBlog\Framework\Http\Response;
 
 class Raw
 {
@@ -19,11 +19,11 @@ class Raw
     }
 
     /**
-     * @param array $headers
+     * @param string $headers
      */
-    public function setHeaders(array $headers): void
+    public function setHeaders(string $headers): void
     {
-        $this->headers = $headers;
+        $this->headers[] = $headers;
     }
 
     /**

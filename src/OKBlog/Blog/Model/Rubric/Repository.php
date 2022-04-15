@@ -41,8 +41,7 @@ class Repository
                 ->setRubricId(4)
                 ->setName('Інтерв\'ю')
                 ->setUrl('interview')
-                ->setPosts([10,11]),
-
+                ->setPosts([10,11])
         ];
     }
 

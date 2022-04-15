@@ -4,23 +4,20 @@ declare(strict_types=1);
 
 namespace OKBlog\Blog\Controller;
 
+use OKBlog\Framework\Http\Response\Raw;
+
 class Rubric implements \OKBlog\Framework\Http\ControllerInterface
 {
-    private \OKBlog\Framework\Http\Request $request;
+    private  \OKBlog\Framework\View\PageResponse $pageResponse;
 
     public function __construct(
-        \OKBlog\Framework\Http\Request $request
+        \OKBlog\Framework\View\PageResponse $pageResponse
     ) {
-        $this->request = $request;
+        $this->pageResponse = $pageResponse;
     }
 
-    public function execute(): string
+    public function execute(): Raw
     {
-        $data = $this->request->getParameter('rubric');
-        $page = 'rubric.php';
-
-        ob_start();
-        require_once "../src/template.php";
-        return ob_get_clean();
+        return $this->pageResponse->setBody(\OKBlog\Blog\Block\RubricBlock::class);
     }
 }

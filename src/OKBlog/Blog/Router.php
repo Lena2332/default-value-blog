@@ -11,10 +11,18 @@ class Router implements \OKBlog\Framework\Http\RouterInterface
 {
     private $request;
 
+    private $rubricRepository;
+
+    private $postRepository;
+
     public function __construct(
-        \OKBlog\Framework\Http\Request $request
+        \OKBlog\Framework\Http\Request $request,
+        \OKBlog\Blog\Model\Rubric\Repository $rubricRepository,
+        \OKBlog\Blog\Model\Post\Repository $postRepository
     ) {
         $this->request = $request;
+        $this->rubricRepository = $rubricRepository;
+        $this->postRepository = $postRepository;
     }
 
     /**
@@ -22,14 +30,13 @@ class Router implements \OKBlog\Framework\Http\RouterInterface
      */
     public function match(string $requestUrl): string
     {
-        require_once '../src/data.php';
 
-        if ($data = getRubricByUrl($requestUrl)) {
+        if ($data = $this->rubricRepository->getRubricByUrl($requestUrl)) {
             $this->request->setParameter('rubric', $data);
             return Rubric::class;
         }
 
-        if ($data = getPostByUrl($requestUrl)) {
+        if ($data = $this->postRepository->getPostByUrl($requestUrl)) {
             $this->request->setParameter('post', $data);
             return Post::class;
         }

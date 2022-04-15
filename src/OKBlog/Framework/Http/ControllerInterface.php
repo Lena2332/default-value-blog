@@ -2,7 +2,9 @@
 
 namespace OKBlog\Framework\Http;
 
+use OKBlog\Framework\Http\Response\Raw;
+
 interface ControllerInterface
 {
-    public function execute(): string;
+    public function execute(): Raw;
 }

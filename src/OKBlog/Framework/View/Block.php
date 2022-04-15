@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace OKBlog\Blog\Framework\View;
+namespace OKBlog\Framework\View;
 
 class Block
 {

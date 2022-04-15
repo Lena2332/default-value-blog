@@ -134,7 +134,7 @@ class Repository
     public function getPostByIds(array $postIdArr): array
     {
         return array_intersect_key(
-            $this->getList(),
+            $this->getPostList(),
             array_flip($postIdArr)
         );
     }
