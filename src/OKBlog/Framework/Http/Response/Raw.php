@@ -36,10 +36,14 @@ class Raw
 
     /**
      * @param string $body
+     * @param string $template
+     * @return $this
      */
-    public function setBody(string $body): void
+    public function setBody(string $body, string $template = ''): Raw
     {
         $this->body = $body;
+
+        return $this;
     }
 
     /**
