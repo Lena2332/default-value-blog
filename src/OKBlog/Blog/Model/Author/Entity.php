@@ -10,6 +10,8 @@ class Entity
 
     private string $name;
 
+    private string $url;
+
     /**
      * @return int
      */
@@ -20,10 +22,13 @@ class Entity
 
     /**
      * @param int $authorId
+     * @return $this
      */
-    public function setAuthorId(int $authorId): void
+    public function setAuthorId(int $authorId): Entity
     {
         $this->authorId = $authorId;
+
+        return $this;
     }
 
     /**
@@ -44,5 +49,26 @@ class Entity
 
         return $this;
     }
+
+    /**
+     * @return string
+     */
+    public function getUrl(): string
+    {
+        return $this->url;
+    }
+
+    /**
+     * @param string $url
+     * @return $this
+     */
+    public function setUrl(string $url): Entity
+    {
+        $this->url = $url;
+
+        return $this;
+    }
+
+
 
 }

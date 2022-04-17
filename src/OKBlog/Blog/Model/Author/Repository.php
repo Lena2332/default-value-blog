@@ -26,13 +26,16 @@ class Repository
         return [
             1 => $this->makeEntity()
                 ->setAuthorId(1)
-                ->setName('Vadim Kolesnik'),
+                ->setName('Vadim Kolesnik')
+                ->setUrl('vadim-kolesnik'),
             2 => $this->makeEntity()
                 ->setAuthorId(2)
-                ->setName('Iryna Tkachuk'),
+                ->setName('Iryna Tkachuk')
+                ->setUrl('iryna-tkachuk'),
             3 => $this->makeEntity()
-                ->setPostId(3)
+                ->setAuthorId(3)
                 ->setName('Valentyna Sirenko')
+                ->setUrl('valentyna-sirenko')
         ];
     }
 
@@ -54,6 +57,23 @@ class Repository
         return array_pop($data);
     }
 
+    /**
+     * @param string $url
+     * @return \OKBlog\Blog\Model\Author\Entity|null
+     */
+    public function getAuthorByUrl(string $url): ?Entity
+    {
+        $authors = $this->getAuthorList();
+
+        $data = array_filter(
+            $authors,
+            static function ($author) use ($url) {
+                return $author->getUrl() === $url;
+            }
+        );
+
+        return array_pop($data);
+    }
 
     /**
      * @return Entity
