@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace OKBlog\Blog\Block;
 
+use OKBlog\Blog\Model\Author\Entity as AuthorEntity;
 use OKBlog\Blog\Model\Rubric\Entity as RubricEntity;
 
 class RubricListBlock extends \OKBlog\Framework\View\Block
@@ -28,5 +29,6 @@ class RubricListBlock extends \OKBlog\Framework\View\Block
     {
         return $this->rubricRepository->getRubricList();
     }
+
 
 }

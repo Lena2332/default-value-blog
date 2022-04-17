@@ -20,6 +20,8 @@ class Entity
 
     private string $publicDate;
 
+    private int $authorId;
+
     /**
      * @return int
      */
@@ -153,5 +155,26 @@ class Entity
 
         return $this;
     }
+
+    /**
+     * @return int
+     */
+    public function getAuthorId(): int
+    {
+        return $this->authorId;
+    }
+
+    /**
+     * @param int $authorId
+     * @return $this
+     */
+    public function setAuthorId(int $authorId): Entity
+    {
+        $this->authorId = $authorId;
+
+        return $this;
+    }
+
+
 
 }

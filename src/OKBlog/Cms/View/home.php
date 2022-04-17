@@ -11,8 +11,9 @@
                     <img src="/img/<?= $post->getImg() ?>" alt="<?= $post->getName() ?>" width="200"/>
                 </a>
                 <a href="/<?= $post->getUrl() ?>" title="<?= $post->getName() ?>" class="title"><?= $post->getName() ?></a>
-                <span>created: <?= $post->getPublicDate() ?></span>
-                <button type="button">Read now</button>
+                <span>Author: <a href="/<?= $block->getAuthorById($post->getAuthorId())->getUrl() ?>"><?= $block->getAuthorById($post->getAuthorId())->getName() ?></a></span>
+                <span>Created: <?= $post->getPublicDate() ?></span>
+                <button type="button"><a href="/<?= $post->getUrl() ?>">Read now</a></button>
             </div>
             <?php endforeach ?>
         </div>
