@@ -12,7 +12,7 @@ class Router implements \OKBlog\Framework\Http\RouterInterface
 
     public function __construct(
         \OKBlog\Framework\Http\Request $request
-    ){
+    ) {
         $this->request = $request;
     }
 

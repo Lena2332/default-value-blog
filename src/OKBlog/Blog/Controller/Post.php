@@ -4,23 +4,26 @@ declare(strict_types=1);
 
 namespace OKBlog\Blog\Controller;
 
+use OKBlog\Framework\Http\Response\Raw;
+
 class Post implements \OKBlog\Framework\Http\ControllerInterface
 {
-    private $request;
+    private  \OKBlog\Framework\View\PageResponse $pageResponse;
 
+    /**
+     * @param \OKBlog\Framework\View\PageResponse $pageResponse
+     */
     public function __construct(
-        \OKBlog\Framework\Http\Request $request
-    ){
-         $this->request = $request;
+        \OKBlog\Framework\View\PageResponse $pageResponse
+    ) {
+        $this->pageResponse = $pageResponse;
     }
 
-    public function execute(): string
+    /**
+     * @return Raw
+     */
+    public function execute(): Raw
     {
-        $data = $this->request->getParameter('post');
-        $page = 'post.php';
-
-        ob_start();
-        require_once "../src/template.php";
-        return ob_get_clean();
+        return $this->pageResponse->setBody(\OKBlog\Blog\Block\PostBlock::class);
     }
 }

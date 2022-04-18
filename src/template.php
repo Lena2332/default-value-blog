@@ -1,5 +1,5 @@
 <?php
-require_once '../src/data.php';
+/** @var \OKBlog\Framework\View\Renderer $this */
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -13,18 +13,10 @@ require_once '../src/data.php';
         <a href="/" title="{DV.Campus} PHP Framework">
             <img src="/img/logo.jpg" alt="{DV.Campus} Logo" width="200"/>
         </a>
-        <nav>
-            <ul>
-                <?php foreach (getRubricList() as $rubric): ?>
-                    <li>
-                        <a href="/<?= $rubric['url'] ?>"><?= $rubric['name'] ?></a>
-                    </li>
-                <?php endforeach; ?>
-            </ul>
-        </nav>
+        <?= $this->render(\OKBlog\Blog\Block\RubricListBlock::class) ?>
     </header>
 
-    <?php require_once "../src/pages/$page" ?>
+    <?= $this->render($this->getContent(), $this->getContentBlockTemplate()) ?>
 
     <footer>
         <nav>

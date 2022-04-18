@@ -6,7 +6,7 @@ namespace OKBlog\Blog\Controller;
 
 use OKBlog\Framework\Http\Response\Raw;
 
-class Rubric implements \OKBlog\Framework\Http\ControllerInterface
+class Author implements \OKBlog\Framework\Http\ControllerInterface
 {
     private  \OKBlog\Framework\View\PageResponse $pageResponse;
 
@@ -24,6 +24,6 @@ class Rubric implements \OKBlog\Framework\Http\ControllerInterface
      */
     public function execute(): Raw
     {
-        return $this->pageResponse->setBody(\OKBlog\Blog\Block\RubricBlock::class);
+        return $this->pageResponse->setBody(\OKBlog\Blog\Block\AuthorBlock::class);
     }
 }

@@ -1,6 +1,6 @@
 {
   "autoload": {
-    "psr-4": {"OKBlog\\": "../src/OKBlog/"}
+    "psr-4": {"OKBlog\\": "src/OKBlog/"}
   },
   "require": {
     "php-di/php-di": "^6.4"
