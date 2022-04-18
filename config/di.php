@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 return [
-   \OKBlog\Framework\Http\RequestDispatcher::class => DI\autowire()->constructorParameter(
+   \OKBlog\Framework\Http\RequestDispatcher::class => \DI\autowire()->constructorParameter(
        'routers',
        [
            \DI\get(\OKBlog\Cms\Router::class),

@@ -70,5 +70,4 @@ class Repository
     {
         return $this->factory->make(Entity::class);
     }
-
 }

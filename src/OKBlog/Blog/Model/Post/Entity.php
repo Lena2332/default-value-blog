@@ -174,7 +174,4 @@ class Entity
 
         return $this;
     }
-
-
-
 }

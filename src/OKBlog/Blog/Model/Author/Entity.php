@@ -68,7 +68,4 @@ class Entity
 
         return $this;
     }
-
-
-
 }

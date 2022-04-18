@@ -54,5 +54,4 @@ class Router implements \OKBlog\Framework\Http\RouterInterface
         return '';
 
     }
-
 }

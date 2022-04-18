@@ -45,6 +45,4 @@ class PostBlock extends \OKBlog\Framework\View\Block
 
         return $this->authorRepository->getAuthorById($authorId);
     }
-
-
 }

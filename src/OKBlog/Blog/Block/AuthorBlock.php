@@ -50,18 +50,17 @@ class AuthorBlock extends \OKBlog\Framework\View\Block
         $authorId = $this->getAuthor()->getAuthorId();
 
         $posts = $this->postRepository->getPostList();
-        $data = array_filter(
+        return array_filter(
             $posts,
             static function ($post) use ($authorId) {
                 return $post->getAuthorId() === $authorId;
             }
         );
 
-        return $data;
     }
 
     /**
-     * @param int $rubricId
+     * @param int $postId
      * @return RubricEntity|null
      */
     public function getRubricByPostId(int $postId): ?RubricEntity
@@ -77,5 +76,4 @@ class AuthorBlock extends \OKBlog\Framework\View\Block
 
         return array_pop($data);
     }
-
 }
