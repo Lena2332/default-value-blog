@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace OKBlog\Blog\Block;
 
-use OKBlog\Blog\Model\Post\Entity;
 use OKBlog\Blog\Model\Post\Entity as PostEntity;
 use OKBlog\Blog\Model\Author\Entity as AuthorEntity;
 use OKBlog\Blog\Model\Rubric\Entity as RubricEntity;

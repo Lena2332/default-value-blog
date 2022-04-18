@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace OKBlog\Blog\Model\Author;
 
-use OKBlog\Blog\Model\Author\Entity;
-
 class Repository
 {
     private \DI\FactoryInterface $factory;
