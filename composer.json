@@ -3,6 +3,7 @@
     "psr-4": {"OKBlog\\": "src/OKBlog/"}
   },
   "require": {
-    "php-di/php-di": "^6.4"
+    "php-di/php-di": "^6.4",
+    "ext-pdo": "*"
   }
 }
