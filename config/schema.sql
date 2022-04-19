@@ -1,12 +1,12 @@
 DROP TABLE IF EXISTS `rubric_post`;
 #---
+DROP TABLE IF EXISTS `daily_statistic`;
+#---
 DROP TABLE IF EXISTS `post`;
 #---
 DROP TABLE IF EXISTS `rubric`;
 #---
 DROP TABLE IF EXISTS `author`;
-#---
-DROP TABLE IF EXISTS `daily_statistic`;
 #---
 CREATE TABLE `post` (
     `post_id` int unsigned NOT NULL auto_increment COMMENT 'Post ID',
