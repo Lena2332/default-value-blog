@@ -1,4 +1,4 @@
-DROP TABLE IF EXISTS olena_kupriiets_blog;
+DROP DATABASE IF EXISTS olena_kupriiets_blog;
 
 DROP USER IF EXISTS 'olena_kupriiets_blog_user'@'%';
 
