@@ -138,12 +138,14 @@ class GenerateData extends \Symfony\Component\Console\Command\Command
             // random date from 2021-10-01 to 2021-11-01
             $statement->bindValue(':created_at', date('Y-m-d', random_int(1633046400, 1635724800)));
             $statement->execute();
+            // generate authors with namesakes
             if (random_int(1, 4) === 1) {
                 $statement->bindValue(':name', $name);
                 $statement->bindValue(':url', strtolower(str_replace(' ','-', $name.'-2g')));
                 // random date from 2021-10-01 to 2021-11-01
                 $statement->bindValue(':created_at', date('Y-m-d', random_int(1633046400, 1635724800)));
                 $statement->execute();
+                $i++;
             }
         }
     }
@@ -167,7 +169,11 @@ class GenerateData extends \Symfony\Component\Console\Command\Command
             $statement->bindValue(':img', 'news-placeholder.png');
             $statement->bindValue(':intro_text', "$name short description text");
             $statement->bindValue(':text', "$name full description text");
-            $statement->bindValue(':author_id', random_int(1, self::AUTHORS_COUNT), \PDO::PARAM_INT);
+            $authorId = random_int(1, self::AUTHORS_COUNT);
+            if (random_int(1, 7) === 1) {
+                $authorId = null;
+            }
+            $statement->bindValue(':author_id', $authorId);
             // random date from 2021-10-01 to 2021-11-01
             $statement->bindValue(':created_at', date('Y-m-d', random_int(1633046400, 1635724800)));
             $statement->execute();

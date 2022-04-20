@@ -15,7 +15,7 @@ CREATE TABLE `post` (
     `img` varchar(100) DEFAULT NULL COMMENT 'Path to image',
     `intro_text` varchar(255) DEFAULT NULL COMMENT 'Intro text',
     `text` varchar(3000) DEFAULT NULL COMMENT 'Text',
-    `author_id` int unsigned NOT NULL COMMENT 'Author ID',
+    `author_id` int unsigned DEFAULT NULL COMMENT 'Author ID',
     `created_at` datetime DEFAULT CURRENT_TIMESTAMP COMMENT 'Data of post create',
     `updated_at` datetime DEFAULT CURRENT_TIMESTAMP COMMENT 'Data of post update',
     PRIMARY KEY (`post_id`)
