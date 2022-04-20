@@ -4,6 +4,7 @@
   },
   "require": {
     "php-di/php-di": "^6.4",
-    "ext-pdo": "*"
+    "ext-pdo": "*",
+    "symfony/console": "^5.4"
   }
 }
