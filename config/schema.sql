@@ -15,7 +15,7 @@ CREATE TABLE `post` (
     `img` varchar(100) DEFAULT NULL COMMENT 'Path to image',
     `intro_text` varchar(255) DEFAULT NULL COMMENT 'Intro text',
     `text` varchar(3000) DEFAULT NULL COMMENT 'Text',
-    `author_id` int unsigned NOT NULL COMMENT 'Author ID',
+    `author_id` int unsigned COMMENT 'Author ID',
     `created_at` datetime DEFAULT CURRENT_TIMESTAMP COMMENT 'Data of post create',
     `updated_at` datetime DEFAULT CURRENT_TIMESTAMP COMMENT 'Data of post update',
     PRIMARY KEY (`post_id`)
@@ -119,6 +119,6 @@ ALTER TABLE `daily_statistic`
     ADD CONSTRAINT `FK_POST_ID_DAILLY_STAT_POST_ID_POST` FOREIGN KEY (`post_id`)
         REFERENCES `post` (`post_id`) ON DELETE CASCADE;
 #---
-ALTER TABLE `author`
+ALTER TABLE `post`
     ADD CONSTRAINT `FK_POST_ID_AUTHOR` FOREIGN KEY (`author_id`)
-        REFERENCES `post` (`author_id`) ON DELETE SET NULL;
+        REFERENCES `author` (`author_id`) ON DELETE SET NULL;
