@@ -6,6 +6,8 @@ namespace OKBlog\Blog\Model\Author;
 
 class Repository
 {
+    public const TABLE = 'author';
+
     private \DI\FactoryInterface $factory;
 
     /**

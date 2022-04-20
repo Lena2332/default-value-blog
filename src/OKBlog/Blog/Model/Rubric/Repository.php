@@ -6,6 +6,8 @@ namespace OKBlog\Blog\Model\Rubric;
 
 class Repository
 {
+    public const TABLE = 'rubric';
+
     private \DI\FactoryInterface $factory;
 
     /**
