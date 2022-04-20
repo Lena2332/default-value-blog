@@ -118,3 +118,7 @@ VALUES ('1', '1'),
 ALTER TABLE `daily_statistic`
     ADD CONSTRAINT `FK_POST_ID_DAILLY_STAT_POST_ID_POST` FOREIGN KEY (`post_id`)
         REFERENCES `post` (`post_id`) ON DELETE CASCADE;
+#---
+ALTER TABLE `author`
+    ADD CONSTRAINT `FK_POST_ID_AUTHOR` FOREIGN KEY (`author_id`)
+        REFERENCES `post` (`author_id`) ON DELETE SET NULL;
