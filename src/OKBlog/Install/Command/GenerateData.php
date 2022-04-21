@@ -65,8 +65,8 @@ class GenerateData extends \Symfony\Component\Console\Command\Command
     {
         $this->profile([$this, 'truncateTables']);
         $this->profile([$this, 'generateRubrics']);
-        $this->profile([$this, 'generatePosts']);
         $this->profile([$this, 'generateAuthors']);
+        $this->profile([$this, 'generatePosts']);
         $this->profile([$this, 'generatePostRubrics']);
     }
 
