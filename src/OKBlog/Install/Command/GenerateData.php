@@ -14,9 +14,9 @@ class GenerateData extends \Symfony\Component\Console\Command\Command
 {
     protected static $defaultName = 'install:generate-data';
 
-    private const POSTS_COUNT = 300;
+    private const POSTS_COUNT = 250000;
 
-    private const AUTHORS_COUNT = 45;
+    private const AUTHORS_COUNT = 300;
 
     private \OKBlog\Framework\Database\Adapter\AdapterInterface $adapter;
 
@@ -63,11 +63,26 @@ class GenerateData extends \Symfony\Component\Console\Command\Command
      */
     private function generateData(): void
     {
-        $this->profile([$this, 'truncateTables']);
-        $this->profile([$this, 'generateRubrics']);
-        $this->profile([$this, 'generateAuthors']);
-        $this->profile([$this, 'generatePosts']);
-        $this->profile([$this, 'generatePostRubrics']);
+        $callbacks = [
+            [$this, 'truncateTables'],
+            [$this, 'generateRubrics'],
+            [$this, 'generateAuthors'],
+            [$this, 'generatePosts'],
+            [$this, 'generatePostRubrics']
+        ];
+
+        $connection = $this->adapter->getConnection();
+
+        foreach ($callbacks as $callback) {
+            try {
+                $connection->beginTransaction();
+                $this->profile($callback);
+                $connection->commit();
+            } catch (\Exception $e) {
+                $connection->rollBack();
+                throw $e;
+            }
+        }
     }
 
     /**

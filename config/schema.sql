@@ -122,3 +122,6 @@ ALTER TABLE `daily_statistic`
 ALTER TABLE `post`
     ADD CONSTRAINT `FK_POST_ID_AUTHOR` FOREIGN KEY (`author_id`)
         REFERENCES `author` (`author_id`) ON DELETE SET NULL;
+#---
+ALTER TABLE `rubric_post`
+    ADD CONSTRAINT `RP_RUBRIC_ID_POST_ID` UNIQUE (`rubric_id`,`post_id`);
