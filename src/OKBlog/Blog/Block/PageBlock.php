@@ -52,9 +52,9 @@ class PageBlock extends \OKBlog\Framework\View\Block
 
     /**
      * @param int $authorId
-     * @return AuthorEntity
+     * @return AuthorEntity|null
      */
-    public function getAuthorById(int $authorId): AuthorEntity
+    public function getAuthorById(int $authorId): ?AuthorEntity
     {
        return $this->authorRepository->getAuthorById($authorId);
     }

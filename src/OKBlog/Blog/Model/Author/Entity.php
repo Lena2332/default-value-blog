@@ -12,6 +12,8 @@ class Entity
 
     private string $url;
 
+    private string $createdAt;
+
     /**
      * @return int
      */
@@ -65,6 +67,25 @@ class Entity
     public function setUrl(string $url): Entity
     {
         $this->url = $url;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCreatedAt(): string
+    {
+        return date("Y-m-d", strtotime($this->createdAt));
+    }
+
+    /**
+     * @param string $createdAt
+     * @return $this
+     */
+    public function setCreatedAt(string $createdAt): Entity
+    {
+        $this->createdAt = $createdAt;
 
         return $this;
     }

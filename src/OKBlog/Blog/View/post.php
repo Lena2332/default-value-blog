@@ -7,5 +7,5 @@ $post = $block->getPost();
     <h1><?= $post->getName() ?></h1>
     <p><?= $post->getText() ?></p>
     <span>Author: <a href="/<?= $block->getAuthor()->getUrl() ?>"><?= $block->getAuthor()->getName() ?></a></span>
-    <span><?= $post->getPublicDate() ?></span>
+    <span><?= $post->getCreatedAt() ?></span>
 </main>

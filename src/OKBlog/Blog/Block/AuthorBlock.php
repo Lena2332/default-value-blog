@@ -48,14 +48,7 @@ class AuthorBlock extends \OKBlog\Framework\View\Block
     {
         $authorId = $this->getAuthor()->getAuthorId();
 
-        $posts = $this->postRepository->getPostList();
-        return array_filter(
-            $posts,
-            static function ($post) use ($authorId) {
-                return $post->getAuthorId() === $authorId;
-            }
-        );
-
+        return $this->postRepository->getPostsByAuthorId($authorId);
     }
 
     /**
@@ -64,15 +57,6 @@ class AuthorBlock extends \OKBlog\Framework\View\Block
      */
     public function getRubricByPostId(int $postId): ?RubricEntity
     {
-        $rubrics = $this->rubricRepository->getRubricList();
-
-        $data = array_filter(
-            $rubrics,
-            static function ($rubric) use ($postId) {
-                return in_array($postId, $rubric->getPosts());
-            }
-        );
-
-        return array_pop($data);
+        return $this->rubricRepository->getRubricByPostId($postId);
     }
 }

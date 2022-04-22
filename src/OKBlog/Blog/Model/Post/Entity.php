@@ -18,9 +18,11 @@ class Entity
 
     private string $text;
 
-    private string $publicDate;
-
     private int $authorId;
+
+    private string $createdAt;
+
+    private string $updatedAt;
 
     /**
      * @return int
@@ -138,25 +140,6 @@ class Entity
     }
 
     /**
-     * @return string
-     */
-    public function getPublicDate(): string
-    {
-        return $this->publicDate;
-    }
-
-    /**
-     * @param string $publicDate
-     * @return $this
-     */
-    public function setPublicDate(string $publicDate): Entity
-    {
-        $this->publicDate = $publicDate;
-
-        return $this;
-    }
-
-    /**
      * @return int
      */
     public function getAuthorId(): int
@@ -171,6 +154,44 @@ class Entity
     public function setAuthorId(int $authorId): Entity
     {
         $this->authorId = $authorId;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCreatedAt(): string
+    {
+        return date("Y-m-d", strtotime($this->createdAt));
+    }
+
+    /**
+     * @param string $createdAt
+     * @return $this
+     */
+    public function setCreatedAt(string $createdAt): Entity
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getUpdatedAt(): string
+    {
+        return $this->updatedAt;
+    }
+
+    /**
+     * @param string $updatedAt
+     * @return $this
+     */
+    public function setUpdatedAt(string $updatedAt): Entity
+    {
+        $this->updatedAt = $updatedAt;
 
         return $this;
     }

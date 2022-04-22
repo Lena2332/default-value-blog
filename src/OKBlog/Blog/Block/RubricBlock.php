@@ -48,14 +48,14 @@ class RubricBlock extends \OKBlog\Framework\View\Block
     {
        $rubricEntity = $this->getRubric();
 
-       return $this->postRepository->getPostByIds($rubricEntity->getPosts());
+       return $this->postRepository->getPostsByRubricId($rubricEntity->getRubricId());
     }
 
     /**
      * @param int $authorId
-     * @return AuthorEntity
+     * @return AuthorEntity|null
      */
-    public function getAuthorById(int $authorId): AuthorEntity
+    public function getAuthorById(int $authorId): ?AuthorEntity
     {
         return $this->authorRepository->getAuthorById($authorId);
     }
