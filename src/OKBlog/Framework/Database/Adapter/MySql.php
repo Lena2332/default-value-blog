@@ -28,7 +28,7 @@ class MySql implements AdapterInterface
     /**
      * @return \PDO
      */
-    public function getConnection()
+    public function getConnection(): \PDO
     {
         if (!isset(self::$connection)) {
             self::$connection = new \PDO(

@@ -6,6 +6,10 @@ namespace OKBlog\Blog\Model\Post;
 
 class Repository
 {
+    public const TABLE = 'post';
+
+    public const TABLE_RUBRIC_POST = 'rubric_post';
+
     private \DI\FactoryInterface $factory;
 
     /**
