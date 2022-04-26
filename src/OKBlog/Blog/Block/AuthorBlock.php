@@ -16,6 +16,12 @@ class AuthorBlock extends \OKBlog\Framework\View\Block
 
     private \OKBlog\Blog\Model\Rubric\Repository $rubricRepository;
 
+    private array $authorPosts;
+
+    private array $authorRubrics;
+
+    private array $rubricPost;
+
     protected string $template = '../src/OKBlog/Blog/View/author.php';
 
     /**
@@ -48,7 +54,13 @@ class AuthorBlock extends \OKBlog\Framework\View\Block
     {
         $authorId = $this->getAuthor()->getAuthorId();
 
-        return $this->postRepository->getPostsByAuthorId($authorId);
+        $this->authorPosts = $this->postRepository->getPostsByAuthorId($authorId);
+
+        $this->setAllRubricsByPostArr();
+
+        $this->setRubricIdPostId();
+
+        return $this->authorPosts;
     }
 
     /**
@@ -57,6 +69,49 @@ class AuthorBlock extends \OKBlog\Framework\View\Block
      */
     public function getRubricByPostId(int $postId): ?RubricEntity
     {
-        return $this->rubricRepository->getRubricByPostId($postId);
+        $rubricPost = array_column($this->rubricPost, 'rubric_id', 'post_id');
+
+        if(isset($rubricPost[$postId])){
+            $rubricId = (int) $rubricPost[$postId];
+
+            $data = array_filter(
+                $this->authorRubrics,
+                static function ($rubric) use ($rubricId) {
+                    return $rubric->getRubricId() === $rubricId;
+                }
+            );
+
+            return array_pop($data);
+        }
+
+        return null;
+    }
+
+    /**
+     * @return void
+     */
+    private function setAllRubricsByPostArr(): void
+    {
+        $this->authorRubrics = $this->rubricRepository->getRubricsByPostArr($this->getAuthorsPostIdArr());
+    }
+
+    /**
+     * @return array
+     */
+    private function getAuthorsPostIdArr(): array
+    {
+        $postIdArr = array_map(function($post){
+            return $post->getPostId();
+        }, $this->authorPosts);
+
+        return $postIdArr;
+    }
+
+    /**
+     * @return void
+     */
+    private function setRubricIdPostId(): void
+    {
+        $this->rubricPost = $this->postRepository->getPostIdRubricId($this->getAuthorsPostIdArr());
     }
 }

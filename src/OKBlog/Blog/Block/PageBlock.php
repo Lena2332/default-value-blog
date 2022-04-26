@@ -15,6 +15,8 @@ class PageBlock extends \OKBlog\Framework\View\Block
 
     private \OKBlog\Blog\Model\Author\Repository $authorRepository;
 
+    private array $latestPosts;
+
     protected string $template;
 
     /**
@@ -47,7 +49,9 @@ class PageBlock extends \OKBlog\Framework\View\Block
      */
     public function getLatestPosts(int $quantity = 5, int $pastDays = 2): array
     {
-        return $this->postRepository->getLatestPosts($quantity, $pastDays);
+        $this->latestPosts = $this->postRepository->getLatestPosts($quantity, $pastDays);
+
+        return $this->latestPosts;
     }
 
     /**
@@ -56,6 +60,27 @@ class PageBlock extends \OKBlog\Framework\View\Block
      */
     public function getAuthorById(int $authorId): ?AuthorEntity
     {
-       return $this->authorRepository->getAuthorById($authorId);
+        $rubricAuthors = $this->authorRepository->getAuthorByIdArr($this->getLatestAuthorsIdArr());
+
+        $data = array_filter(
+            $rubricAuthors,
+            static function ($author) use ($authorId) {
+                return $author->getAuthorId() === $authorId;
+            }
+        );
+
+        return array_pop($data);
+    }
+
+    /**
+     * @return array
+     */
+    private function getLatestAuthorsIdArr(): array
+    {
+        $authorIdArr = array_map(function($post){
+            return $post->getAuthorId();
+        }, $this->latestPosts);
+
+        return $authorIdArr;
     }
 }

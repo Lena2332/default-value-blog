@@ -37,4 +37,17 @@ class Repository extends \OKBlog\Framework\Database\AbstractRepository
             ]
         );
     }
+
+
+    /**
+     * @param array $authorIdArr
+     * @return Entity[]|null
+     */
+    public function getAuthorByIdArr(array $authorIdArr): ?array
+    {
+        $select = $this->select()
+            ->where('author_id IN ('.implode(',',$authorIdArr).')');
+
+        return $this->fetchEntities($select);
+    }
 }

@@ -16,6 +16,8 @@ class RubricBlock extends \OKBlog\Framework\View\Block
 
     private \OKBlog\Blog\Model\Author\Repository $authorRepository;
 
+    private array $rubricPosts;
+
     protected string $template = '../src/OKBlog/Blog/View/rubric.php';
 
     /**
@@ -48,7 +50,9 @@ class RubricBlock extends \OKBlog\Framework\View\Block
     {
        $rubricEntity = $this->getRubric();
 
-       return $this->postRepository->getPostsByRubricId($rubricEntity->getRubricId());
+       $this->rubricPosts = $this->postRepository->getPostsByRubricId($rubricEntity->getRubricId());
+
+       return $this->rubricPosts;
     }
 
     /**
@@ -57,6 +61,27 @@ class RubricBlock extends \OKBlog\Framework\View\Block
      */
     public function getAuthorById(int $authorId): ?AuthorEntity
     {
-        return $this->authorRepository->getAuthorById($authorId);
+        $rubricAuthors = $this->authorRepository->getAuthorByIdArr($this->getRubricAuthorsIdArr());
+
+        $data = array_filter(
+            $rubricAuthors,
+            static function ($author) use ($authorId) {
+                return $author->getAuthorId() === $authorId;
+            }
+        );
+
+        return array_pop($data);
+    }
+
+    /**
+     * @return array
+     */
+    private function getRubricAuthorsIdArr(): array
+    {
+        $authorIdArr = array_map(function($post){
+            return $post->getAuthorId();
+        }, $this->rubricPosts);
+
+        return $authorIdArr;
     }
 }

@@ -81,4 +81,19 @@ class Repository extends \OKBlog\Framework\Database\AbstractRepository
             ]
         );
     }
+
+    /**
+     * @param array $postIdArr
+     * @return array
+     */
+    public function getPostIdRubricId(array $postIdArr): array
+    {
+        $select = $this->select()
+            ->fields('rubric_id', true)
+            ->fields('post_id')
+            ->innerJoin(self::TABLE_RUBRIC_POST, 'rp', ' USING(`post_id`)')
+            ->where('rp.post_id IN ('.implode(',',$postIdArr).')');
+
+        return $this->fetchArray($select);
+    }
 }

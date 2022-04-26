@@ -65,6 +65,31 @@ class AbstractRepository
     }
 
     /**
+     * Fetch rows with ability to filter data with WHERE clause
+     *
+     * @param MySQLSelectQuery|null $query
+     * @param array $bind
+     * @return array
+     */
+    public function fetchArray(MySQLSelectQuery $query = null, array $bind = []): array
+    {
+        if (!$query) {
+            $query = $this->select();
+        }
+
+        $statement = $this->adapter->getConnection()->prepare((string) $query);
+        $statement->execute($bind);
+        $this->describeTable();
+        $result = [];
+
+        while ($row = $statement->fetch(\PDO::FETCH_ASSOC)) {
+            $result[] = $row;
+        }
+
+        return $result;
+    }
+
+    /**
      * @param MySQLSelectQuery|null $query
      * @param array $where
      * @return object|null
