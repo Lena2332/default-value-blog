@@ -16,6 +16,8 @@ class AuthorBlock extends \OKBlog\Framework\View\Block
 
     private \OKBlog\Blog\Model\Rubric\Repository $rubricRepository;
 
+    public static bool $isInit = false;
+
     private ?array $authorPosts;
 
     private array $authorRubrics;
@@ -37,8 +39,6 @@ class AuthorBlock extends \OKBlog\Framework\View\Block
         $this->request = $request;
         $this->postRepository = $postRepository;
         $this->rubricRepository = $rubricRepository;
-
-        $this->init();
     }
 
     /**
@@ -46,14 +46,23 @@ class AuthorBlock extends \OKBlog\Framework\View\Block
      */
     private function init(): void
     {
-        $authorId = $this->getAuthor()->getAuthorId();
+        if (!AuthorBlock::$isInit) {
+            try {
+               $authorId = $this->getAuthor()->getAuthorId();
+            } catch (\InvalidArgumentException $exception) {
+               throw $exception;
+            }
 
-        $this->authorPosts = $this->postRepository->getPostsByAuthorId($authorId);
+            $this->authorPosts = $this->postRepository->getPostsByAuthorId($authorId);
 
-        $this->setAllRubricsByPostArr();
+            $this->setAllRubricsByPostArr();
 
-        $this->setRubricIdPostId();
+            $this->setRubricIdPostId();
+
+            AuthorBlock::$isInit = true;
+        }
     }
+
 
     /**
      * @return AuthorEntity
@@ -68,6 +77,8 @@ class AuthorBlock extends \OKBlog\Framework\View\Block
      */
     public function getAuthorPosts(): ?array
     {
+        $this->init();
+
         return $this->authorPosts;
     }
 
@@ -77,7 +88,11 @@ class AuthorBlock extends \OKBlog\Framework\View\Block
      */
     private function getRubricByPostId(int $postId): array
     {
-        return $this->rubricPost[$postId] ?? [];
+        if (!isset($this->rubricPost[$postId])) {
+            throw new \InvalidArgumentException ("Sorry, but postId: ".$postId." is not isset");
+        }
+
+        return $this->rubricPost[$postId];
     }
 
     /**
@@ -86,6 +101,8 @@ class AuthorBlock extends \OKBlog\Framework\View\Block
      */
     public function getRubricsNameByPostId(int $postId): string
     {
+        $this->init();
+
         $rubricsArr = $this->getRubricByPostId($postId);
 
         if (!empty($rubricsArr)) {
