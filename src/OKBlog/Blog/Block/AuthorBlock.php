@@ -16,7 +16,7 @@ class AuthorBlock extends \OKBlog\Framework\View\Block
 
     private \OKBlog\Blog\Model\Rubric\Repository $rubricRepository;
 
-    private array $authorPosts;
+    private ?array $authorPosts;
 
     private array $authorRubrics;
 
@@ -37,6 +37,22 @@ class AuthorBlock extends \OKBlog\Framework\View\Block
         $this->request = $request;
         $this->postRepository = $postRepository;
         $this->rubricRepository = $rubricRepository;
+
+        $this->init();
+    }
+
+    /**
+     * @return void
+     */
+    private function init(): void
+    {
+        $authorId = $this->getAuthor()->getAuthorId();
+
+        $this->authorPosts = $this->postRepository->getPostsByAuthorId($authorId);
+
+        $this->setAllRubricsByPostArr();
+
+        $this->setRubricIdPostId();
     }
 
     /**
@@ -48,18 +64,10 @@ class AuthorBlock extends \OKBlog\Framework\View\Block
     }
 
     /**
-     * @return PostEntity[]
+     * @return PostEntity[]|null
      */
-    public function getAuthorPosts(): array
+    public function getAuthorPosts(): ?array
     {
-        $authorId = $this->getAuthor()->getAuthorId();
-
-        $this->authorPosts = $this->postRepository->getPostsByAuthorId($authorId);
-
-        $this->setAllRubricsByPostArr();
-
-        $this->setRubricIdPostId();
-
         return $this->authorPosts;
     }
 
@@ -69,10 +77,6 @@ class AuthorBlock extends \OKBlog\Framework\View\Block
      */
     private function getRubricByPostId(int $postId): array
     {
-        if (empty($this->rubricPost) || empty($this->authorRubrics)) {
-            $this->getAuthorPosts();
-        }
-
         return $this->rubricPost[$postId] ?? [];
     }
 
@@ -108,7 +112,7 @@ class AuthorBlock extends \OKBlog\Framework\View\Block
      */
     private function getAuthorsPostIdArr(): array
     {
-        $postIdArr = array_map(function($post) {
+        $postIdArr = array_map(function ($post) {
             return $post->getPostId();
         }, $this->authorPosts);
 
