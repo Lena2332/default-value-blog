@@ -73,7 +73,7 @@ class AuthorBlock extends \OKBlog\Framework\View\Block
             $this->getAuthorPosts();
         }
 
-            return $this->rubricPost[$postId] ?? [];
+        return $this->rubricPost[$postId] ?? [];
     }
 
     /**
