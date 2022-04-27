@@ -5,7 +5,7 @@
     <section title="Latest News">
         <h2>Latest News</h2>
         <div class="news-list">
-            <?php foreach($block->getLatestPosts(4,10) as $post): ?>
+            <?php foreach($block->getLatestPosts() as $post): ?>
             <div class="news">
                 <a href="/<?= $post->getUrl() ?>" title="<?= $post->getName() ?>">
                     <img src="/img/<?= $post->getImg() ?>" alt="<?= $post->getName() ?>" width="200"/>
