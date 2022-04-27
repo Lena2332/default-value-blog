@@ -17,7 +17,13 @@ class PageBlock extends \OKBlog\Framework\View\Block
 
     private array $latestPosts;
 
+    private array $latestAuthors;
+
     protected string $template;
+
+    public static int $quantity = 5;
+
+    public static int $daysAgo = 10;
 
     /**
      * @param \OKBlog\Framework\Http\Request $request
@@ -47,9 +53,11 @@ class PageBlock extends \OKBlog\Framework\View\Block
     /**
      * @return PostEntity[]
      */
-    public function getLatestPosts(int $quantity = 5, int $pastDays = 2): array
+    public function getLatestPosts(): array
     {
-        $this->latestPosts = $this->postRepository->getLatestPosts($quantity, $pastDays);
+        if (!isset($this->latestPosts)) {
+            $this->latestPosts = $this->postRepository->getLatestPosts(self::$quantity, self::$daysAgo);
+        }
 
         return $this->latestPosts;
     }
@@ -60,27 +68,39 @@ class PageBlock extends \OKBlog\Framework\View\Block
      */
     public function getAuthorById(int $authorId): ?AuthorEntity
     {
-        $rubricAuthors = $this->authorRepository->getAuthorByIdArr($this->getLatestAuthorsIdArr());
+        $this->setLatestAuthors();
 
-        $data = array_filter(
-            $rubricAuthors,
-            static function ($author) use ($authorId) {
-                return $author->getAuthorId() === $authorId;
-            }
-        );
+        if ($authorId === 0) {
+            return null;
+        }
 
-        return array_pop($data);
+        if (!isset($this->latestAuthors[$authorId])) {
+            // Protection from incorrect method usage in case somebody tries to pass wrong post ID
+            throw new \InvalidArgumentException (
+                "Author #$authorId does not belong to latest list"
+            );
+        }
+
+        return $this->latestAuthors[$authorId];
     }
 
     /**
-     * @return array
+     * @return void
      */
-    private function getLatestAuthorsIdArr(): array
+    private function setLatestAuthors(): void
     {
-        $authorIdArr = array_map(function($post){
-            return $post->getAuthorId();
-        }, $this->latestPosts);
+        if (!isset($this->latestAuthors)) {
+            // Get author IDs for the next query
+            $authorIdArr = array_map(function($post){
+                return $post->getAuthorId();
+            }, $this->getLatestPosts());
 
-        return $authorIdArr;
+            // Remove authorId = 0 (when post has not author) and remove dublicates
+            $authorIdArr = array_diff(array_unique($authorIdArr), array(0));
+
+            foreach ($this->authorRepository->getAuthorByIdArr($authorIdArr) as $author) {
+                $this->latestAuthors[$author->getAuthorId()] = $author;
+            }
+        }
     }
 }

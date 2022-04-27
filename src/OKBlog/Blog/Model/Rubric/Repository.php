@@ -59,14 +59,16 @@ class Repository extends \OKBlog\Framework\Database\AbstractRepository
     }
 
     /**
-     * @param array $postArr
+     * @param array $postIds
      * @return Entity[]|null
      */
-    public function getRubricsByPostArr(array $postArr): ?array
+    public function getRubricsByPostIds(array $postIds): ?array
     {
         $select = $this->select()
+            ->distinct(true)
             ->innerJoin(self::TABLE_RUBRIC_POST, 'rp', ' USING(`rubric_id`)')
-            ->where('rp.post_id IN ('.implode(',',$postArr).')');
+            ->fields(self::TABLE . '.*', true)
+            ->where('rp.post_id IN ('.implode(',',$postIds).')');
 
         return $this->fetchEntities($select);
     }

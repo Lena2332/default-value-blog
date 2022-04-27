@@ -6,7 +6,6 @@ namespace OKBlog\Blog\Block;
 
 use OKBlog\Blog\Model\Post\Entity as PostEntity;
 use OKBlog\Blog\Model\Author\Entity as AuthorEntity;
-use OKBlog\Blog\Model\Rubric\Entity as RubricEntity;
 
 class AuthorBlock extends \OKBlog\Framework\View\Block
 {
@@ -16,13 +15,9 @@ class AuthorBlock extends \OKBlog\Framework\View\Block
 
     private \OKBlog\Blog\Model\Rubric\Repository $rubricRepository;
 
-    public static bool $isInit = false;
-
     private ?array $authorPosts;
 
-    private array $authorRubrics;
-
-    private array $rubricPost;
+    private array $rubricsByPostId;
 
     protected string $template = '../src/OKBlog/Blog/View/author.php';
 
@@ -42,29 +37,6 @@ class AuthorBlock extends \OKBlog\Framework\View\Block
     }
 
     /**
-     * @return void
-     */
-    private function init(): void
-    {
-        if (!AuthorBlock::$isInit) {
-            try {
-               $authorId = $this->getAuthor()->getAuthorId();
-            } catch (\InvalidArgumentException $exception) {
-               throw $exception;
-            }
-
-            $this->authorPosts = $this->postRepository->getPostsByAuthorId($authorId);
-
-            $this->setAllRubricsByPostArr();
-
-            $this->setRubricIdPostId();
-
-            AuthorBlock::$isInit = true;
-        }
-    }
-
-
-    /**
      * @return AuthorEntity
      */
     public function getAuthor(): AuthorEntity
@@ -77,22 +49,12 @@ class AuthorBlock extends \OKBlog\Framework\View\Block
      */
     public function getAuthorPosts(): ?array
     {
-        $this->init();
-
-        return $this->authorPosts;
-    }
-
-    /**
-     * @param int $postId
-     * @return RubricEntity[]
-     */
-    private function getRubricByPostId(int $postId): array
-    {
-        if (!isset($this->rubricPost[$postId])) {
-            throw new \InvalidArgumentException ("Sorry, but postId: ".$postId." is not isset");
+        if (!isset($this->authorPosts)) {
+            $authorId = $this->getAuthor()->getAuthorId();
+            $this->authorPosts = $this->postRepository->getPostsByAuthorId($authorId);
         }
 
-        return $this->rubricPost[$postId];
+        return $this->authorPosts;
     }
 
     /**
@@ -101,60 +63,51 @@ class AuthorBlock extends \OKBlog\Framework\View\Block
      */
     public function getRubricsNameByPostId(int $postId): string
     {
-        $this->init();
+        $this->setRubricsByPostId();
 
-        $rubricsArr = $this->getRubricByPostId($postId);
-
-        if (!empty($rubricsArr)) {
-           $rubricsNameArr = array_map(function ($rubric) {
-               return $rubric->getName();
-           }, $rubricsArr);
-
-           return implode(', ', $rubricsNameArr);
+        if (!isset($this->rubricsByPostId[$postId])) {
+            // Protection from incorrect method usage in case somebody tries to pass wrong post ID
+            throw new \InvalidArgumentException (
+                "Post #$postId does not belong to author #{$this->getAuthor()->getAuthorId()}"
+            );
         }
 
-        return "";
+        $rubricsNames = array_map(static function ($rubric) {
+            return $rubric->getName();
+        }, $this->rubricsByPostId[$postId]);
+
+        // Can also return the entire array so that every Rubric has a link to its page
+        return implode(', ', $rubricsNames);
     }
 
     /**
+     * Set RubricEntity[] to each postId
      * @return void
      */
-    private function setAllRubricsByPostArr(): void
+    private function setRubricsByPostId(): void
     {
-        $this->authorRubrics = $this->rubricRepository->getRubricsByPostArr($this->getAuthorsPostIdArr());
-    }
+        if (!isset($this->rubricsByPostId)) {
+            // Get post IDs for the next query
+            $authorPostIds = array_map(static function ($post) {
+                return $post->getPostId();
+            }, $this->getAuthorPosts());
 
-    /**
-     * @return array
-     */
-    private function getAuthorsPostIdArr(): array
-    {
-        $postIdArr = array_map(function ($post) {
-            return $post->getPostId();
-        }, $this->authorPosts);
+            // Get All rubrics for the above posts
+            $rubricsById = [];
 
-        return $postIdArr;
-    }
+            foreach ($this->rubricRepository->getRubricsByPostIds($authorPostIds) as $rubric) {
+                $rubricsById[$rubric->getRubricId()] = $rubric;
+            }
 
-    /**
-     * @return void
-     */
-    private function setRubricIdPostId(): void
-    {
-       $rubricIdPostIdArr = $this->postRepository->getPostIdRubricId($this->getAuthorsPostIdArr());
+            // By default, every known post may be in 0 or more rubrics
+            $rubricsByPostId = array_fill_keys($authorPostIds, []);
 
-       foreach($rubricIdPostIdArr as $row) {
+            // Get post to rubric relations, and combine this with port IDs
+            foreach ($this->postRepository->getPostIdRubricId($authorPostIds) as $row) {
+                $rubricsByPostId[$row['post_id']][] = $rubricsById[$row['rubric_id']];
+            }
 
-           $rubricId = (int) $row['rubric_id'];
-
-           $data = array_filter(
-               $this->authorRubrics,
-               static function ($rubric) use ($rubricId) {
-                   return $rubric->getRubricId() === $rubricId;
-               }
-           );
-
-           $this->rubricPost[$row['post_id']][] = array_pop($data);
-       }
+            $this->rubricsByPostId = $rubricsByPostId;
+        }
     }
 }
