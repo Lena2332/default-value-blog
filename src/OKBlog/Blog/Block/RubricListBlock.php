@@ -13,6 +13,8 @@ class RubricListBlock extends \OKBlog\Framework\View\Block
 
     private \OKBlog\Blog\Model\Rubric\Repository $rubricRepository;
 
+    const LIMIT_RUBRIC = 5;
+
     /**
      * @param \OKBlog\Blog\Model\Rubric\Repository $rubricRepository
      */
@@ -27,6 +29,6 @@ class RubricListBlock extends \OKBlog\Framework\View\Block
      */
     public function getRubricList(): array
     {
-       return $this->rubricRepository->getRubricList();
+       return array_slice($this->rubricRepository->getRubricList(),0, self::LIMIT_RUBRIC);
     }
 }

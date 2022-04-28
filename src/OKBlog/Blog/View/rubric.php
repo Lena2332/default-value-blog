@@ -8,14 +8,14 @@
             <?php foreach($block->getRubricPosts() as $post): ?>
             <div class="news">
                 <a href="/<?= $post->getUrl() ?>" title="<?= $post->getName() ?>">
-                    <img src="/img/<?= $post->getImg() ?>" alt="<?= $post->getName() ?>" width="200"/>
+                    <img src="/images/<?= $post->getImg() ?>" alt="<?= $post->getName() ?>" width="200"/>
                 </a>
                 <a href="/<?= $post->getUrl() ?>" title="<?= $post->getName() ?>" class="title"><?= $post->getName() ?></a>
                 <?php
                        $author = $block->getAuthorById($post->getAuthorId());
                        if($author):
                 ?>
-                     <span>Author: <a href="/<?= $author->getUrl() ?>"><?= $author->getName() ?></a></span>
+                     <span class="author_post"><i class="fa-solid fa-user"></i> Author: <a href="/<?= $author->getUrl() ?>"><?= $author->getName() ?></a></span>
                 <?php endif; ?>
                 <span>Created: <?= $post->getCreatedAt() ?></span>
                 <button type="button"><a href="/<?= $post->getUrl() ?>">Read now</a></button>
