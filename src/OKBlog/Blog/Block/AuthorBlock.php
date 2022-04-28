@@ -6,7 +6,6 @@ namespace OKBlog\Blog\Block;
 
 use OKBlog\Blog\Model\Post\Entity as PostEntity;
 use OKBlog\Blog\Model\Author\Entity as AuthorEntity;
-use OKBlog\Blog\Model\Rubric\Entity as RubricEntity;
 
 class AuthorBlock extends \OKBlog\Framework\View\Block
 {
@@ -16,11 +15,9 @@ class AuthorBlock extends \OKBlog\Framework\View\Block
 
     private \OKBlog\Blog\Model\Rubric\Repository $rubricRepository;
 
-    private array $authorPosts;
+    private ?array $authorPosts;
 
-    private array $authorRubrics;
-
-    private array $rubricPost;
+    private array $rubricsByPostId;
 
     const LIMIT_POST = 36;
 
@@ -50,70 +47,69 @@ class AuthorBlock extends \OKBlog\Framework\View\Block
     }
 
     /**
-     * @return PostEntity[]
+     * @return PostEntity[]|null
      */
-    public function getAuthorPosts(): array
+    public function getAuthorPosts(): ?array
     {
-        $authorId = $this->getAuthor()->getAuthorId();
-
-        $this->authorPosts = array_slice($this->postRepository->getPostsByAuthorId($authorId), 0, self::LIMIT_POST);
-
-        $this->setAllRubricsByPostArr();
-
-        $this->setRubricIdPostId();
+        if (!isset($this->authorPosts)) {
+            $authorId = $this->getAuthor()->getAuthorId();
+            $this->authorPosts = array_slice($this->postRepository->getPostsByAuthorId($authorId), 0, self::LIMIT_POST);
+        }
 
         return $this->authorPosts;
     }
 
     /**
      * @param int $postId
-     * @return RubricEntity|null
+     * @return string
      */
-    public function getRubricByPostId(int $postId): ?RubricEntity
+    public function getRubricsNameByPostId(int $postId): string
     {
-        $rubricPost = array_column($this->rubricPost, 'rubric_id', 'post_id');
+        $this->setRubricsByPostId();
 
-        if(isset($rubricPost[$postId])){
-            $rubricId = (int) $rubricPost[$postId];
-
-            $data = array_filter(
-                $this->authorRubrics,
-                static function ($rubric) use ($rubricId) {
-                    return $rubric->getRubricId() === $rubricId;
-                }
+        if (!isset($this->rubricsByPostId[$postId])) {
+            // Protection from incorrect method usage in case somebody tries to pass wrong post ID
+            throw new \InvalidArgumentException (
+                "Post #$postId does not belong to author #{$this->getAuthor()->getAuthorId()}"
             );
-
-            return array_pop($data);
         }
 
-        return null;
+        $rubricsNames = array_map(static function ($rubric) {
+            return $rubric->getName();
+        }, $this->rubricsByPostId[$postId]);
+
+        // Can also return the entire array so that every Rubric has a link to its page
+        return implode(', ', $rubricsNames);
     }
 
     /**
+     * Set RubricEntity[] to each postId
      * @return void
      */
-    private function setAllRubricsByPostArr(): void
+    private function setRubricsByPostId(): void
     {
-        $this->authorRubrics = $this->rubricRepository->getRubricsByPostArr($this->getAuthorsPostIdArr());
-    }
+        if (!isset($this->rubricsByPostId)) {
+            // Get post IDs for the next query
+            $authorPostIds = array_map(static function ($post) {
+                return $post->getPostId();
+            }, $this->getAuthorPosts());
 
-    /**
-     * @return array
-     */
-    private function getAuthorsPostIdArr(): array
-    {
-        $postIdArr = array_map(function($post){
-            return $post->getPostId();
-        }, $this->authorPosts);
+            // Get All rubrics for the above posts
+            $rubricsById = [];
 
-        return $postIdArr;
-    }
+            foreach ($this->rubricRepository->getRubricsByPostIds($authorPostIds) as $rubric) {
+                $rubricsById[$rubric->getRubricId()] = $rubric;
+            }
 
-    /**
-     * @return void
-     */
-    private function setRubricIdPostId(): void
-    {
-        $this->rubricPost = $this->postRepository->getPostIdRubricId($this->getAuthorsPostIdArr());
+            // By default, every known post may be in 0 or more rubrics
+            $rubricsByPostId = array_fill_keys($authorPostIds, []);
+
+            // Get post to rubric relations, and combine this with port IDs
+            foreach ($this->postRepository->getPostIdRubricId($authorPostIds) as $row) {
+                $rubricsByPostId[$row['post_id']][] = $rubricsById[$row['rubric_id']];
+            }
+
+            $this->rubricsByPostId = $rubricsByPostId;
+        }
     }
 }

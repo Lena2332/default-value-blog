@@ -16,7 +16,9 @@ class RubricBlock extends \OKBlog\Framework\View\Block
 
     private \OKBlog\Blog\Model\Author\Repository $authorRepository;
 
-    private array $rubricPosts;
+    private ?array $rubricPosts;
+
+    private array $rubricAuthors;
 
     const LIMIT_POST = 36;
 
@@ -48,42 +50,51 @@ class RubricBlock extends \OKBlog\Framework\View\Block
     /**
      * @return PostEntity[]
      */
-    public function  getRubricPosts(): array
+    public function  getRubricPosts(): ?array
     {
-       $rubricEntity = $this->getRubric();
-
-       $this->rubricPosts = array_slice($this->postRepository->getPostsByRubricId($rubricEntity->getRubricId()), 0, self::LIMIT_POST);
+       if (!isset($this->rubricPosts)) {
+           $rubricEntity = $this->getRubric();
+           $this->rubricPosts = array_slice($this->postRepository->getPostsByRubricId($rubricEntity->getRubricId()), 0, self::LIMIT_POST);
+       }
 
        return $this->rubricPosts;
     }
 
     /**
      * @param int $authorId
-     * @return AuthorEntity|null
+     * @return AuthorEntity
      */
-    public function getAuthorById(int $authorId): ?AuthorEntity
+    public function getAuthorById(int $authorId): AuthorEntity
     {
-        $rubricAuthors = $this->authorRepository->getAuthorByIdArr($this->getRubricAuthorsIdArr());
+        $this->setRubricAuthors();
 
-        $data = array_filter(
-            $rubricAuthors,
-            static function ($author) use ($authorId) {
-                return $author->getAuthorId() === $authorId;
-            }
-        );
+        if (!isset($this->rubricAuthors[$authorId])) {
+            // Protection from incorrect method usage in case somebody tries to pass wrong post ID
+            throw new \InvalidArgumentException (
+                "Author #$authorId does not belong to rubric #{$this->getRubric()->getRubricId()}"
+            );
+        }
 
-        return array_pop($data);
+        return $this->rubricAuthors[$authorId];
     }
 
     /**
-     * @return array
+     * @return void
      */
-    private function getRubricAuthorsIdArr(): array
+    private function setRubricAuthors(): void
     {
-        $authorIdArr = array_map(function($post){
-            return $post->getAuthorId();
-        }, $this->rubricPosts);
+        if (!isset($this->rubricAuthors)) {
+            // Get author IDs for the next query
+            $authorIdArr = array_map(function ($post) {
+                return $post->getAuthorId();
+            }, $this->getRubricPosts());
 
-        return $authorIdArr;
+            // Remove authorId = 0 (when post has not author) and remove dublicates
+            $authorIdArr = array_diff(array_unique($authorIdArr), array(0));
+
+            foreach ($this->authorRepository->getAuthorByIdArr($authorIdArr) as $author) {
+                $this->rubricAuthors[$author->getAuthorId()] = $author;
+            }
+        }
     }
 }

@@ -12,10 +12,10 @@
                     </a>
                     <a href="/<?= $post->getUrl() ?>" title="<?= $post->getName() ?>" class="title"><?= $post->getName() ?></a>
                     <?php
-                        $rubric = $block->getRubricByPostId($post->getPostId());
+                        $rubric = $block->getRubricsNameByPostId($post->getPostId());
                         if($rubric):
                     ?>
-                    <span>Rubric: <?= $rubric->getName() ?></span>
+                    <span>Rubrics: <?= $rubric ?></span>
                     <?php endif; ?>
                     <span>Created: <?= $post->getCreatedAt() ?></span>
                     <button type="button"><a href="/<?= $post->getUrl() ?>">Read now</a></button>

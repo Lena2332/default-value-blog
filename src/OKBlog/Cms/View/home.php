@@ -52,11 +52,11 @@
                 </a>
                 <a href="/<?= $post->getUrl() ?>" title="<?= $post->getName() ?>" class="title"><?= $post->getName() ?></a>
                 <?php
-                $author = $block->getAuthorById($post->getAuthorId());
-                if($author):
-                    ?>
+                    if($post->getAuthorId()){
+                         $author = $block->getAuthorById($post->getAuthorId());
+                ?>
                     <span class="author_post"><i class="fa-solid fa-user"></i> Author: <a href="/<?= $author->getUrl() ?>"><?= $author->getName() ?></a></span>
-                <?php endif; ?>
+                <?php } ?>
                 <span>Created: <?= $post->getCreatedAt() ?></span>
                 <button type="button"><a href="/<?= $post->getUrl() ?>">Read now</a></button>
             </div>
