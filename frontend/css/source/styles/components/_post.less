@@ -1,6 +1,6 @@
 .news {
   text-align: center;
-  width: 25%;
+  width: 100%;
   margin-bottom: 30px;
 
   .title{
@@ -21,6 +21,12 @@
     a {
       color: @color-orange;
     }
+  }
+}
+
+@media (min-width: @screen__xs){
+  .news {
+    width: 25%;
   }
 }
 

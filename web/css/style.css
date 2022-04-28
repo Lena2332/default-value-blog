@@ -7891,7 +7891,7 @@ footer .copyright {
 }
 .news {
   text-align: center;
-  width: 25%;
+  width: 100%;
   margin-bottom: 30px;
 }
 .news .title {
@@ -7909,6 +7909,11 @@ footer .copyright {
 }
 .news span a {
   color: #ed8106;
+}
+@media (min-width: 640px) {
+  .news {
+    width: 25%;
+  }
 }
 main {
   max-width: 1200px;
@@ -8058,3 +8063,4 @@ main {
 .post_page .clear {
   clear: both;
 }
+/*# sourceMappingURL=main.css.map */
