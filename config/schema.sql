@@ -16,8 +16,8 @@ CREATE TABLE `post` (
     `intro_text` varchar(255) DEFAULT NULL COMMENT 'Intro text',
     `text` varchar(3000) DEFAULT NULL COMMENT 'Text',
     `author_id` int unsigned COMMENT 'Author ID',
-    `created_at` datetime DEFAULT CURRENT_TIMESTAMP COMMENT 'Data of post create',
-    `updated_at` datetime DEFAULT CURRENT_TIMESTAMP COMMENT 'Data of post update',
+    `created_at` timestamp DEFAULT CURRENT_TIMESTAMP COMMENT 'Data of post create',
+    `updated_at` timestamp DEFAULT CURRENT_TIMESTAMP COMMENT 'Data of post update',
     PRIMARY KEY (`post_id`)
 ) ENGINE=InnoDB DEFAULT CHAR SET utf8mb4 COMMENT 'Post entity';
 #---
@@ -42,7 +42,7 @@ CREATE TABLE `author` (
     `author_id` int unsigned NOT NULL auto_increment COMMENT 'Author ID',
     `url` varchar(100) NOT NULL UNIQUE COMMENT 'Url',
     `name` varchar(255) NOT NULL COMMENT 'Author name',
-    `created_at` datetime DEFAULT CURRENT_TIMESTAMP COMMENT 'Data of author create',
+    `created_at` timestamp DEFAULT CURRENT_TIMESTAMP COMMENT 'Data of author create',
     PRIMARY KEY (`author_id`)
 ) ENGINE=InnoDB DEFAULT CHAR SET utf8mb4 COMMENT 'Author entity';
 #---
@@ -57,7 +57,7 @@ CREATE TABLE `rubric` (
     `rubric_id` int unsigned NOT NULL auto_increment COMMENT 'Rubric ID',
     `url` varchar(100) NOT NULL UNIQUE COMMENT 'Url',
     `name` varchar(255) NOT NULL COMMENT 'Rubric name',
-    `created_at` datetime DEFAULT CURRENT_TIMESTAMP COMMENT 'Data of rubric create',
+    `created_at` timestamp DEFAULT CURRENT_TIMESTAMP COMMENT 'Data of rubric create',
     PRIMARY KEY (`rubric_id`)
 ) ENGINE=InnoDB DEFAULT CHAR SET utf8mb4 COMMENT 'Rubric entity';
 #---
@@ -122,3 +122,6 @@ ALTER TABLE `daily_statistic`
 ALTER TABLE `post`
     ADD CONSTRAINT `FK_POST_ID_AUTHOR` FOREIGN KEY (`author_id`)
         REFERENCES `author` (`author_id`) ON DELETE SET NULL;
+#---
+ALTER TABLE `rubric_post`
+    ADD CONSTRAINT `RP_RUBRIC_ID_POST_ID` UNIQUE (`rubric_id`,`post_id`);

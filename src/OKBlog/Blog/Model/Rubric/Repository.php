@@ -4,18 +4,44 @@ declare(strict_types=1);
 
 namespace OKBlog\Blog\Model\Rubric;
 
-class Repository
+class Repository extends \OKBlog\Framework\Database\AbstractRepository
 {
     public const TABLE = 'rubric';
 
-    private \DI\FactoryInterface $factory;
+    public const ENTITY = Entity::class;
+
+    public const TABLE_RUBRIC_POST = 'rubric_post';
 
     /**
-     * @param \DI\FactoryInterface $factory
+     * @param string $url
+     * @return Entity|null|object
      */
-    public function __construct(\DI\FactoryInterface $factory)
+    public function getRubricByUrl(string $url): ?Entity
     {
-        $this->factory = $factory;
+        return $this->fetchOne(
+            $this->select()->where('url = :url'),
+            [
+                ':url' => $url
+            ]
+        );
+    }
+
+    /**
+     * @param int $postId
+     * @return Entity|null|object
+     */
+    public function getRubricByPostId(int $postId): ?Entity
+    {
+        $query = $this->select()
+            ->innerJoin(self::TABLE_RUBRIC_POST, '', ' USING(`rubric_id`)')
+            ->where('post_id = :post_id');
+
+        return $this->fetchOne(
+            $query,
+            [
+                ':post_id' => $postId
+            ]
+        );
     }
 
     /**
@@ -23,53 +49,27 @@ class Repository
      */
     public function getRubricList(): array
     {
-        return [
-            1 => $this->makeEntity()
-                ->setRubricId(1)
-                ->setName('Головні новини')
-                ->setUrl('main')
-                ->setPosts([1,3,7]),
-            2 => $this->makeEntity()
-                ->setRubricId(2)
-                ->setName('Економіка')
-                ->setUrl('economic')
-                ->setPosts([2,5,8]),
-            3 => $this->makeEntity()
-                ->setRubricId(3)
-                ->setName('Культура')
-                ->setUrl('culture')
-                ->setPosts([4,6,9]),
-            4 => $this->makeEntity()
-                ->setRubricId(4)
-                ->setName('Інтерв\'ю')
-                ->setUrl('interview')
-                ->setPosts([10,11])
-        ];
+        $select = $this->select()
+            ->fields('DISTINCT (rubric.rubric_id)', true)
+            ->fields('url')
+            ->fields('name')
+            ->innerJoin(self::TABLE_RUBRIC_POST, 'rp', 'ON rubric.rubric_id = rp.rubric_id');
+
+        return $this->fetchEntities($select);
     }
 
     /**
-     * @param string $url
-     * @return Entity|null
+     * @param array $postIds
+     * @return Entity[]|null
      */
-    public function getRubricByUrl(string $url): ?Entity
+    public function getRubricsByPostIds(array $postIds): ?array
     {
-        $data = array_filter(
-            $this->getRubricList(),
-            static function ($rubric) use ($url) {
-                return $rubric->getUrl() === $url;
-            }
-        );
+        $select = $this->select()
+            ->distinct(true)
+            ->innerJoin(self::TABLE_RUBRIC_POST, 'rp', ' USING(`rubric_id`)')
+            ->fields(self::TABLE . '.*', true)
+            ->where('rp.post_id IN ('.implode(',',$postIds).')');
 
-        return array_pop($data);
-    }
-
-    /**
-     * @return Entity
-     * @throws \DI\DependencyException
-     * @throws \DI\NotFoundException
-     */
-    private function makeEntity(): Entity
-    {
-        return $this->factory->make(Entity::class);
+        return $this->fetchEntities($select);
     }
 }

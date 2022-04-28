@@ -16,6 +16,10 @@ class RubricBlock extends \OKBlog\Framework\View\Block
 
     private \OKBlog\Blog\Model\Author\Repository $authorRepository;
 
+    private ?array $rubricPosts;
+
+    private array $rubricAuthors;
+
     protected string $template = '../src/OKBlog/Blog/View/rubric.php';
 
     /**
@@ -44,11 +48,14 @@ class RubricBlock extends \OKBlog\Framework\View\Block
     /**
      * @return PostEntity[]
      */
-    public function  getRubricPosts(): array
+    public function  getRubricPosts(): ?array
     {
-       $rubricEntity = $this->getRubric();
+       if (!isset($this->rubricPosts)) {
+           $rubricEntity = $this->getRubric();
+           $this->rubricPosts = $this->postRepository->getPostsByRubricId($rubricEntity->getRubricId());
+       }
 
-       return $this->postRepository->getPostByIds($rubricEntity->getPosts());
+       return $this->rubricPosts;
     }
 
     /**
@@ -57,6 +64,35 @@ class RubricBlock extends \OKBlog\Framework\View\Block
      */
     public function getAuthorById(int $authorId): AuthorEntity
     {
-        return $this->authorRepository->getAuthorById($authorId);
+        $this->setRubricAuthors();
+
+        if (!isset($this->rubricAuthors[$authorId])) {
+            // Protection from incorrect method usage in case somebody tries to pass wrong post ID
+            throw new \InvalidArgumentException (
+                "Author #$authorId does not belong to rubric #{$this->getRubric()->getRubricId()}"
+            );
+        }
+
+        return $this->rubricAuthors[$authorId];
+    }
+
+    /**
+     * @return void
+     */
+    private function setRubricAuthors(): void
+    {
+        if (!isset($this->rubricAuthors)) {
+            // Get author IDs for the next query
+            $authorIdArr = array_map(function ($post) {
+                return $post->getAuthorId();
+            }, $this->getRubricPosts());
+
+            // Remove authorId = 0 (when post has not author) and remove dublicates
+            $authorIdArr = array_diff(array_unique($authorIdArr), array(0));
+
+            foreach ($this->authorRepository->getAuthorByIdArr($authorIdArr) as $author) {
+                $this->rubricAuthors[$author->getAuthorId()] = $author;
+            }
+        }
     }
 }

@@ -14,9 +14,9 @@ class GenerateData extends \Symfony\Component\Console\Command\Command
 {
     protected static $defaultName = 'install:generate-data';
 
-    private const POSTS_COUNT = 300;
+    private const POSTS_COUNT = 250000;
 
-    private const AUTHORS_COUNT = 45;
+    private const AUTHORS_COUNT = 300;
 
     private \OKBlog\Framework\Database\Adapter\AdapterInterface $adapter;
 
@@ -63,11 +63,26 @@ class GenerateData extends \Symfony\Component\Console\Command\Command
      */
     private function generateData(): void
     {
-        $this->profile([$this, 'truncateTables']);
-        $this->profile([$this, 'generateRubrics']);
-        $this->profile([$this, 'generateAuthors']);
-        $this->profile([$this, 'generatePosts']);
-        $this->profile([$this, 'generatePostRubrics']);
+        $callbacks = [
+            [$this, 'truncateTables'],
+            [$this, 'generateRubrics'],
+            [$this, 'generateAuthors'],
+            [$this, 'generatePosts'],
+            [$this, 'generatePostRubrics']
+        ];
+
+        $connection = $this->adapter->getConnection();
+
+        foreach ($callbacks as $callback) {
+            try {
+                $connection->beginTransaction();
+                $this->profile($callback);
+                $connection->commit();
+            } catch (\Exception $e) {
+                $connection->rollBack();
+                throw $e;
+            }
+        }
     }
 
     /**
@@ -113,8 +128,8 @@ class GenerateData extends \Symfony\Component\Console\Command\Command
         foreach ($rubrics as $rubric) {
             $statement->bindValue(':name', $rubric);
             $statement->bindValue(':url', strtolower(str_replace(' ','-', $rubric)));
-            // random date from 2021-10-01 to 2021-11-01
-            $statement->bindValue(':created_at', date('Y-m-d', random_int(1633046400, 1635724800)));
+            // random date from 2022-01-01 to 2022-04-22
+            $statement->bindValue(':created_at', date('Y-m-d', random_int(1640988000, 1650609280)));
             $statement->execute();
         }
     }
@@ -135,15 +150,15 @@ class GenerateData extends \Symfony\Component\Console\Command\Command
             $name = $this->getRandomName();
             $statement->bindValue(':name', $name);
             $statement->bindValue(':url', strtolower(str_replace(' ','-', $name)));
-            // random date from 2021-10-01 to 2021-11-01
-            $statement->bindValue(':created_at', date('Y-m-d', random_int(1633046400, 1635724800)));
+            // random date from 2022-01-01 to 2022-04-22
+            $statement->bindValue(':created_at', date('Y-m-d', random_int(1640988000, 1650609280)));
             $statement->execute();
             // generate authors with namesakes
             if (random_int(1, 4) === 1) {
                 $statement->bindValue(':name', $name);
                 $statement->bindValue(':url', strtolower(str_replace(' ','-', $name.'-2g')));
-                // random date from 2021-10-01 to 2021-11-01
-                $statement->bindValue(':created_at', date('Y-m-d', random_int(1633046400, 1635724800)));
+                // random date from 2022-01-01 to 2022-04-22
+                $statement->bindValue(':created_at', date('Y-m-d', random_int(1640988000, 1650609280)));
                 $statement->execute();
                 $i++;
             }
@@ -174,8 +189,8 @@ class GenerateData extends \Symfony\Component\Console\Command\Command
                 $authorId = null;
             }
             $statement->bindValue(':author_id', $authorId);
-            // random date from 2021-10-01 to 2021-11-01
-            $statement->bindValue(':created_at', date('Y-m-d', random_int(1633046400, 1635724800)));
+            // random date from 2022-01-01 to 2022-04-22
+            $statement->bindValue(':created_at', date('Y-m-d', random_int(1640988000, 1650609280)));
             $statement->execute();
         }
     }

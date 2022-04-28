@@ -6,6 +6,11 @@ $post = $block->getPost();
     <img src="img/<?= $post->getImg() ?>" alt="<?= $post->getName() ?>" width="300"/>
     <h1><?= $post->getName() ?></h1>
     <p><?= $post->getText() ?></p>
-    <span>Author: <a href="/<?= $block->getAuthor()->getUrl() ?>"><?= $block->getAuthor()->getName() ?></a></span>
-    <span><?= $post->getPublicDate() ?></span>
+    <?php
+    $author = $block->getAuthor($post->getAuthorId());
+    if($author):
+        ?>
+        <span>Author: <a href="/<?= $author->getUrl() ?>"><?= $author->getName() ?></a></span>
+    <?php endif; ?>
+    <span><?= $post->getCreatedAt() ?></span>
 </main>
