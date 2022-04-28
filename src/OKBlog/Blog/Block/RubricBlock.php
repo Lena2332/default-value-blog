@@ -60,15 +60,11 @@ class RubricBlock extends \OKBlog\Framework\View\Block
 
     /**
      * @param int $authorId
-     * @return AuthorEntity|null
+     * @return AuthorEntity
      */
-    public function getAuthorById(int $authorId): ?AuthorEntity
+    public function getAuthorById(int $authorId): AuthorEntity
     {
         $this->setRubricAuthors();
-
-        if ($authorId === 0) {
-            return null;
-        }
 
         if (!isset($this->rubricAuthors[$authorId])) {
             // Protection from incorrect method usage in case somebody tries to pass wrong post ID
@@ -87,7 +83,7 @@ class RubricBlock extends \OKBlog\Framework\View\Block
     {
         if (!isset($this->rubricAuthors)) {
             // Get author IDs for the next query
-            $authorIdArr = array_map(function($post){
+            $authorIdArr = array_map(function ($post) {
                 return $post->getAuthorId();
             }, $this->getRubricPosts());
 

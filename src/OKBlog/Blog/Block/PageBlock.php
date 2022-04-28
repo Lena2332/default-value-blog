@@ -64,15 +64,11 @@ class PageBlock extends \OKBlog\Framework\View\Block
 
     /**
      * @param int $authorId
-     * @return AuthorEntity|null
+     * @return AuthorEntity
      */
-    public function getAuthorById(int $authorId): ?AuthorEntity
+    public function getAuthorById(int $authorId): AuthorEntity
     {
         $this->setLatestAuthors();
-
-        if ($authorId === 0) {
-            return null;
-        }
 
         if (!isset($this->latestAuthors[$authorId])) {
             // Protection from incorrect method usage in case somebody tries to pass wrong post ID
@@ -91,7 +87,7 @@ class PageBlock extends \OKBlog\Framework\View\Block
     {
         if (!isset($this->latestAuthors)) {
             // Get author IDs for the next query
-            $authorIdArr = array_map(function($post){
+            $authorIdArr = array_map(function ($post) {
                 return $post->getAuthorId();
             }, $this->getLatestPosts());
 
