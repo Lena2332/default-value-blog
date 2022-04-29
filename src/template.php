@@ -8,6 +8,7 @@
     <title>{DV.Campus} PHP Framework</title>
     <link rel="preload" as="style" href="/css/main.min.css"/>
     <link rel="stylesheet" href="/css/main.min.css"/>
+    <script type="module" src="/js/main.js" defer></script>
 </head>
 <body>
     <header>
