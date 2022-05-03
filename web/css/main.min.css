@@ -7973,6 +7973,11 @@ button a {
     font-size: 16px;
   }
 }
+.slider-track {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
 header {
   height: 80px;
   background-color: #41135b;

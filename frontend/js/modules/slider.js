@@ -111,7 +111,6 @@ class Slider
         }
 
         this.initSlider();
-
     }
 
     initSlider()
