@@ -147,7 +147,14 @@ header {
         }
     }
 
+    .nav-menu.right {
+        left: 0;
+        transform: translateX(-100%);
 
+       &.active {
+         transform: translateX(0);
+       }
+    }
 }
 
 @media (min-width: @screen__m) {

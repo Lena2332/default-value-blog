@@ -7876,6 +7876,13 @@ header nav ul a {
   .nav-menu.active a:hover {
     text-decoration: underline;
   }
+  .nav-menu.right {
+    left: 0;
+    transform: translateX(-100%);
+  }
+  .nav-menu.right.active {
+    transform: translateX(0);
+  }
 }
 @media (min-width: 768px) {
   header nav .menu-btn-mobile {

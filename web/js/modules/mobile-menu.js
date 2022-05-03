@@ -1,6 +1,7 @@
 const defaultParams = {
     buttonSelector: "#menu-btn",
-    navWrapper: "#nav-wrap"
+    navWrapper: "#nav-wrap",
+    showDirection: 'left'
 }
 
 class MobileMenu {
@@ -11,6 +12,7 @@ class MobileMenu {
 
         this.button = document.querySelector(buttonSelector);
         this.navWrapper = document.querySelector(navWrapper);
+        this.navWrapper.classList.add(this.params.showDirection);
 
         if(this.button){
             this.addEventListeners();
