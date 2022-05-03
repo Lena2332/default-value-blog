@@ -3,3 +3,6 @@
 !/var/log/.gitkeep
 /vendor/
 /node_modules/
+/web/css/main.min.css
+/web/css/main.css.map
+

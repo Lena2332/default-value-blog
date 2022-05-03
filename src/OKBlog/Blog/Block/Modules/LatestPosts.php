@@ -16,7 +16,7 @@ class LatestPosts extends Block
 
     protected string $template = '../src/OKBlog/Blog/View/Modules/latest_posts.php';
 
-    public static int $quantity = 4;
+    public static int $quantity = 14;
 
     public static int $daysAgo = 14;
 
