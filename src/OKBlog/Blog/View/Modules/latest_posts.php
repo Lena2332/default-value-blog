@@ -4,7 +4,7 @@
 ?>
 <section title="Latest News" class="latest_news">
     <h2>Latest News</h2>
-    <div class="news-list">
+    <div class="news-list blog-slider">
         <?php foreach($block->getPosts() as $post): ?>
             <div class="news">
                 <a href="/<?= $post->getUrl() ?>" title="<?= $post->getName() ?>">
