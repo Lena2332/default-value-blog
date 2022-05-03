@@ -19,6 +19,8 @@ class AuthorBlock extends \OKBlog\Framework\View\Block
 
     private array $rubricsByPostId;
 
+    const LIMIT_POST = 36;
+
     protected string $template = '../src/OKBlog/Blog/View/author.php';
 
     /**
@@ -51,7 +53,7 @@ class AuthorBlock extends \OKBlog\Framework\View\Block
     {
         if (!isset($this->authorPosts)) {
             $authorId = $this->getAuthor()->getAuthorId();
-            $this->authorPosts = $this->postRepository->getPostsByAuthorId($authorId);
+            $this->authorPosts = array_slice($this->postRepository->getPostsByAuthorId($authorId), 0, self::LIMIT_POST);
         }
 
         return $this->authorPosts;

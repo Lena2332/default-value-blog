@@ -1,0 +1,92 @@
+body {
+  margin: 0;
+  padding: 0;
+  color: @base-text-color;
+  font-size: 16px;
+  font-family: @raleway-Regular;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+h1{
+  color: @color-green;
+  font-size: 32px;
+  font-weight: bold;
+  font-family: @raleway-Regular;
+  margin-top: 50px;
+}
+ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+a {
+  text-decoration: none;
+}
+
+.content-wrapper {
+  max-width: 1200px;
+  padding-left: 15px;
+  padding-right: 15px;
+  margin: 0 auto;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+main {
+  flex-grow: 1;
+}
+i {
+  font-style: normal;
+}
+button {
+  background: @background-color-grape;
+  font-size: 16px;
+  font-family: @raleway-Medium;
+  padding: 10px 15px;
+  border-radius: 10px;
+  color: @button-text-color;
+  overflow: hidden;
+  position: relative;
+  z-index: 1;
+  border: 1px solid transparent;
+}
+button a {
+  color: white;
+  text-decoration: none;
+}
+.button-hover {
+  transition: all 0.3s;
+
+  &:before {
+    content: '';
+    position: absolute;
+    z-index: -1;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    transform: scaleX(0);
+    transform-origin: 100% 0;
+    transition-duration: 0.3s;
+    transition-property: transform;
+    transition-timing-function: ease-out;
+    background: @button-text-color;
+  }
+
+  &:hover {
+    color: @background-color-grape;
+  }
+
+  &:hover:before {
+    transform: scaleX(1);
+    transform-origin: 0 100%;
+  }
+}
+
+@media (min-width: @screen__m){
+  body {
+    font-size: 16px;
+  }
+}

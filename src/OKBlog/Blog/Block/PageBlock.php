@@ -21,7 +21,7 @@ class PageBlock extends \OKBlog\Framework\View\Block
 
     protected string $template;
 
-    public static int $quantity = 5;
+    public static int $quantity = 4;
 
     public static int $daysAgo = 10;
 

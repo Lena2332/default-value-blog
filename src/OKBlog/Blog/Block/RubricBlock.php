@@ -20,6 +20,8 @@ class RubricBlock extends \OKBlog\Framework\View\Block
 
     private array $rubricAuthors;
 
+    const LIMIT_POST = 36;
+
     protected string $template = '../src/OKBlog/Blog/View/rubric.php';
 
     /**
@@ -52,7 +54,7 @@ class RubricBlock extends \OKBlog\Framework\View\Block
     {
        if (!isset($this->rubricPosts)) {
            $rubricEntity = $this->getRubric();
-           $this->rubricPosts = $this->postRepository->getPostsByRubricId($rubricEntity->getRubricId());
+           $this->rubricPosts = array_slice($this->postRepository->getPostsByRubricId($rubricEntity->getRubricId()), 0, self::LIMIT_POST);
        }
 
        return $this->rubricPosts;

@@ -2,15 +2,18 @@
 /** @var \OKBlog\Blog\Block\PostBlock $block */
 $post = $block->getPost();
 ?>
-<main>
-    <img src="img/<?= $post->getImg() ?>" alt="<?= $post->getName() ?>" width="300"/>
+<main class="post_page">
     <h1><?= $post->getName() ?></h1>
-    <p><?= $post->getText() ?></p>
-    <?php
-    $author = $block->getAuthor($post->getAuthorId());
-    if($author):
-        ?>
-        <span>Author: <a href="/<?= $author->getUrl() ?>"><?= $author->getName() ?></a></span>
-    <?php endif; ?>
-    <span><?= $post->getCreatedAt() ?></span>
+    <div class="left_part">
+        <img src="/images/<?= $post->getImg() ?>" alt="<?= $post->getName() ?>" width="300"/>
+        <span class="created">Created: <?= $post->getCreatedAt() ?></span>
+        <?php
+            if ($post->getAuthorId()) {
+                $author = $block->getAuthor($post->getAuthorId());
+            ?>
+            <span class="author_post">Author: <a href="/<?= $author->getUrl() ?>"><?= $author->getName() ?></a></span>
+        <?php  } ?>
+    </div>
+    <div class="right_part text"><?= $post->getText() ?></div>
+    <div class="clear"></div>
 </main>

@@ -2,6 +2,11 @@
   /** @var \OKBlog\Blog\Block\RubricListBlock $block */
 ?>
 <nav>
+    <div class="menu-btn-mobile">
+        <button class="wrapper-button">
+            <i></i><i></i><i></i>
+        </button>
+    </div>
     <ul>
         <?php foreach ($block->getRubricList() as $rubric): ?>
             <li>
