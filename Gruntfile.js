@@ -118,5 +118,4 @@ module.exports = function(grunt) {
 
     grunt.registerTask('default', ['less:dev', 'postcss:dev', 'image', 'copy:dev', 'watch']);
     grunt.registerTask('prod', ['less:prod', 'postcss:prod', 'image', 'uglify:prod']);
-    grunt.registerTask('dev', ['less:dev', 'postcss:dev', 'image', 'watch', 'copy:dev']);
 };
