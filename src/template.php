@@ -5,9 +5,11 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <title>{DV.Campus} PHP Framework</title>
     <link rel="preload" as="style" href="/css/main.min.css"/>
     <link rel="stylesheet" href="/css/main.min.css"/>
+    <script type="module" src="/js/main.js" defer></script>
 </head>
 <body>
     <header>
