@@ -8,7 +8,7 @@ new MobileMenu({
 
 new Slider('.blog-slider',{
     navigation: true,
-    loop: true,
+    loop: false,
     slidesPerView: 3,
     breakpoints: {
         360: {

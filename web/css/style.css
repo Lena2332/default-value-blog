@@ -7777,6 +7777,7 @@ button a {
 }
 .slider-list {
   overflow: hidden;
+  margin-bottom: 100px;
 }
 .slider-track {
   display: flex;
@@ -7808,6 +7809,27 @@ button a {
 }
 .slider-control:hover {
   opacity: 1;
+}
+.slider-pagination {
+  position: absolute;
+  bottom: 30px;
+  margin-left: auto;
+  margin-right: auto;
+  left: 0;
+  right: 0;
+  text-align: center;
+}
+.slider-pagination li {
+  display: inline-block;
+  border: 1px solid #41135b;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  margin: 4px;
+  cursor: pointer;
+}
+.slider-pagination li.active {
+  background-color: #41135b;
 }
 header {
   height: 80px;

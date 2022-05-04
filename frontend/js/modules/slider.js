@@ -15,8 +15,9 @@ const defaultParams = {
     additionalSlideClass: '',
     navigation: false,
     breakpoints: {},
-    autoplay: true,
-    autoplay_speed: 1000
+    autoplay: false,
+    autoplay_speed: 1000,
+    showPagination: true
 }
 
 /**
@@ -269,6 +270,7 @@ class Slider
      * @param {Number} speed
      */
     toSlide(slideIndex, speed = 0) {
+        console.log(this.activeIndex, this.params.slidesPerView, this.slides.length);
         const direction = slideIndex > 0 ? -1 : 1;
         const destination = slideIndex * this.getSlideWidth() * direction;
         this.track.style.transform = `translate3d(${destination}px, 0px, 0px)`;
@@ -276,6 +278,7 @@ class Slider
         this.activeIndex = slideIndex;
 
         this.updateNavigation();
+        this.updatePagination();
     }
 
     /**
@@ -394,6 +397,38 @@ class Slider
         }
     }
 
+    /** create pagination */
+    initPagination() {
+        if(this.params.showPagination && this.slides.length > 1) {
+            const paginationHtml = `<ul class="slider-pagination">
+                                    </ul>`;
+            this.params.el.insertAdjacentHTML('beforeend', paginationHtml);
+            this.paginationWrap = this.params.el.querySelector('.slider-pagination');
+
+            for (var i = 0; i <= this.slides.length-this.params.slidesPerView; i++) {
+                let active = '';
+                if(i === this.activeIndex) {
+                    active = 'class = "active"';
+                }
+                let dot = `<li data-index="${i}" ${active}></li>`;
+                this.paginationWrap.insertAdjacentHTML('beforeend', dot);
+            }
+
+            this.dots =  this.paginationWrap.querySelectorAll('li');
+        }
+    }
+
+
+    updatePagination() {
+        if(this.params.showPagination && this.slides.length > 1) {
+            let elements = this.paginationWrap.querySelectorAll('li');
+            for(var i = 0; i < elements.length; i++) {
+                elements[i].classList.remove('active');
+            }
+            this.paginationWrap.querySelectorAll('[data-index="'+this.activeIndex+'"]')[0].classList.add('active');
+        }
+    }
+
     /** event registration */
     initEvents() {
         /** event delegation useful for dynamic content */
@@ -404,6 +439,16 @@ class Slider
 
             if (this.nextButton.contains(event.target)) {
                 this.slideNext()
+            }
+
+            if(this.params.showPagination && this.slides.length > 1) {
+                if (this.paginationWrap.contains(event.target)) {
+                    let slideIndex = event.target.dataset['index'];
+                    if (slideIndex) {
+                        this.toSlide(slideIndex, this.params.speed)
+                    }
+
+                }
             }
         })
 
@@ -423,6 +468,8 @@ class Slider
                 this.initAutoplay();
             }
         });
+
+        /** pagination click */
     }
 
     /** action to determing next slide move */
@@ -471,6 +518,8 @@ class Slider
         this.initEvents();
         this.updateNavigation();
         this.initAutoplay();
+        this.initPagination();
+        this.updatePagination();
     }
 }
 
