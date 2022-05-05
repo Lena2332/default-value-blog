@@ -16,4 +16,6 @@ $post = $block->getPost();
     </div>
     <div class="right_part text"><?= $post->getText() ?></div>
     <div class="clear"></div>
+
+    <?= $this->render(\OKBlog\Blog\Block\Modules\RecentlyViewedPosts::class) ?>
 </main>
