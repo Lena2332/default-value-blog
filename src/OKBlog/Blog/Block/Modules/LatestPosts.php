@@ -18,8 +18,6 @@ class LatestPosts extends Block
 
     public static int $quantity = 14;
 
-    public static int $daysAgo = 14;
-
     use GetAuthor;
 
     /**
@@ -40,10 +38,9 @@ class LatestPosts extends Block
     public function getPosts(): array
     {
         if (!isset($this->latestPosts)) {
-            $this->latestPosts = $this->postRepository->getLatestPosts(self::$quantity, self::$daysAgo);
+            $this->latestPosts = $this->postRepository->getLatestPosts(self::$quantity);
         }
 
         return $this->latestPosts;
     }
-
 }

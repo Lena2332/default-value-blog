@@ -99,7 +99,6 @@ class Slider
             }
 
             if(containers.length === 1) {
-                console.log('container');
                 sliderParams.el = containers[0]
             }
         }
@@ -270,7 +269,6 @@ class Slider
      * @param {Number} speed
      */
     toSlide(slideIndex, speed = 0) {
-        console.log(this.activeIndex, this.params.slidesPerView, this.slides.length);
         const direction = slideIndex > 0 ? -1 : 1;
         const destination = slideIndex * this.getSlideWidth() * direction;
         this.track.style.transform = `translate3d(${destination}px, 0px, 0px)`;

@@ -31,17 +31,14 @@ class Repository extends \OKBlog\Framework\Database\AbstractRepository
      * @param int $pastDays
      * @return Entity[]|null
      */
-    public function getLatestPosts(int $quantity, int $pastDays): ?array
+    public function getLatestPosts(int $quantity): ?array
     {
         $query = $this->select()
-            ->where('DATEDIFF(CURDATE(), created_at) < :days')
+            ->orderBy('post_id')
             ->limit($quantity);
 
         return $this->fetchEntities(
-            $query,
-            [
-                ':days' => $pastDays
-            ]
+            $query
         );
     }
 
