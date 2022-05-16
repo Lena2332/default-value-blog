@@ -113,6 +113,11 @@ class Slider
             posThreshold: 0.4
         }
 
+        /** if we cannot locate dom element for slider init, return null */
+        if (!sliderParams.el) {
+            return;
+        }
+
         /**
          * We bind this (slider instance) to touch events here due to 2 facts:
          * 1. We need a way to remove exact the same event handler after touch is over
@@ -133,6 +138,7 @@ class Slider
         if (this.currentBreakpoint !== newCurrentBreakpoint) {
             this.currentBreakpoint = newCurrentBreakpoint;
             this.updateSliderProps();
+            this.createPagination();
 
             if (this.params.navigation && this.slides.length > this.params.slidesPerView) {
                 this.prevButton.classList.add('active')
@@ -397,25 +403,29 @@ class Slider
 
     /** create pagination */
     initPagination() {
+        this.createPagination(true);
+    }
+
+    createPagination(init = false) {
         if(this.params.showPagination && this.slides.length > 1) {
+            if (!init) {
+                this.params.el.querySelector('.slider-pagination').remove();
+            }
             const paginationHtml = `<ul class="slider-pagination">
-                                    </ul>`;
+                                        </ul>`;
             this.params.el.insertAdjacentHTML('beforeend', paginationHtml);
             this.paginationWrap = this.params.el.querySelector('.slider-pagination');
 
-            for (var i = 0; i <= this.slides.length-this.params.slidesPerView; i++) {
+            for (var i = 0; i <= this.slides.length - this.params.slidesPerView; i++) {
                 let active = '';
-                if(i === this.activeIndex) {
+                if (i === this.activeIndex) {
                     active = 'class = "active"';
                 }
                 let dot = `<li data-index="${i}" ${active}></li>`;
                 this.paginationWrap.insertAdjacentHTML('beforeend', dot);
             }
-
-            this.dots =  this.paginationWrap.querySelectorAll('li');
         }
     }
-
 
     updatePagination() {
         if(this.params.showPagination && this.slides.length > 1) {
